@@ -1,0 +1,115 @@
+{
+  "version": "0.1.0",
+  "league_system": {
+    "tiers": [
+      {
+        "tier_id": "bronze",
+        "name": "브론즈",
+        "rank_range": [1, 1000],
+        "promotion_rank": 500,
+        "demotion_rank": null,
+        "season_reward": {
+          "gold": 5000,
+          "crystals": 100
+        }
+      },
+      {
+        "tier_id": "silver",
+        "name": "실버",
+        "rank_range": [1, 800],
+        "promotion_rank": 300,
+        "demotion_rank": 600,
+        "season_reward": {
+          "gold": 10000,
+          "crystals": 200,
+          "equipment": "silver_frame"
+        }
+      },
+      {
+        "tier_id": "gold",
+        "name": "골드",
+        "rank_range": [1, 500],
+        "promotion_rank": 150,
+        "demotion_rank": 400,
+        "season_reward": {
+          "gold": 20000,
+          "crystals": 500,
+          "equipment": "gold_frame"
+        }
+      },
+      {
+        "tier_id": "platinum",
+        "name": "플래티넘",
+        "rank_range": [1, 300],
+        "promotion_rank": 80,
+        "demotion_rank": 250,
+        "season_reward": {
+          "gold": 50000,
+          "crystals": 1000,
+          "equipment": "platinum_frame",
+          "mercenary": "platinum_exclusive"
+        }
+      },
+      {
+        "tier_id": "diamond",
+        "name": "다이아몬드",
+        "rank_range": [1, 100],
+        "promotion_rank": 30,
+        "demotion_rank": 80,
+        "season_reward": {
+          "gold": 100000,
+          "crystals": 2000,
+          "equipment": "diamond_frame",
+          "mercenary": "diamond_exclusive"
+        }
+      },
+      {
+        "tier_id": "master",
+        "name": "마스터",
+        "rank_range": [1, 50],
+        "promotion_rank": 10,
+        "demotion_rank": 40,
+        "season_reward": {
+          "gold": 200000,
+          "crystals": 5000,
+          "equipment": "master_frame",
+          "mercenary": "master_exclusive"
+        }
+      },
+      {
+        "tier_id": "legend",
+        "name": "레전드",
+        "rank_range": [1, 10],
+        "promotion_rank": null,
+        "demotion_rank": 10,
+        "season_reward": {
+          "gold": 500000,
+          "crystals": 10000,
+          "equipment": "legend_frame",
+          "mercenary": "legend_exclusive",
+          "title": "season_legend"
+        }
+      }
+    ],
+    "matchmaking": {
+      "same_tier_probability": 0.7,
+      "adjacent_tier_probability": 0.3,
+      "rank_variance": 100
+    }
+  },
+  "difficulty_scaling": {
+    "enemy_power_per_tier": 1.3,
+    "reward_per_tier": 1.5
+  },
+  "season": {
+    "duration_days": 30,
+    "soft_reset": {
+      "legend_to": "diamond",
+      "master_to": "platinum",
+      "diamond_to": "gold",
+      "platinum_to": "silver",
+      "gold_to": "bronze",
+      "others_to": "bronze"
+    }
+  }
+}

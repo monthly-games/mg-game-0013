@@ -1,0 +1,92 @@
+{
+  "version": "0.1.0",
+  "currencies": {
+    "gold": {
+      "display_name": "골드",
+      "icon": "assets/icons/gold.png",
+      "initial_amount": 5000,
+      "sources": {
+        "battle_win": {
+          "base": 200,
+          "per_tier_bonus": 50
+        },
+        "daily_quest": {
+          "amount": 1000
+        },
+        "league_promotion": {
+          "bronze_to_silver": 2000,
+          "silver_to_gold": 5000,
+          "gold_to_platinum": 10000,
+          "platinum_to_diamond": 20000,
+          "diamond_to_master": 50000,
+          "master_to_legend": 100000
+        }
+      },
+      "sinks": {
+        "mercenary_upgrade": {
+          "base_cost": 500,
+          "level_multiplier": 1.8
+        },
+        "equipment_upgrade": {
+          "base_cost": 300,
+          "level_multiplier": 1.6
+        },
+        "skill_levelup": {
+          "base_cost": 800,
+          "level_multiplier": 2.0
+        }
+      }
+    },
+    "crystals": {
+      "display_name": "크리스탈",
+      "icon": "assets/icons/crystal.png",
+      "initial_amount": 300,
+      "iap_packages": [
+        { "crystals": 100, "price_usd": 0.99 },
+        { "crystals": 550, "price_usd": 4.99 },
+        { "crystals": 1200, "price_usd": 9.99 },
+        { "crystals": 3000, "price_usd": 19.99 },
+        { "crystals": 8000, "price_usd": 49.99 },
+        { "crystals": 20000, "price_usd": 99.99 }
+      ]
+    },
+    "battle_tickets": {
+      "display_name": "배틀 티켓",
+      "icon": "assets/icons/ticket.png",
+      "max_amount": 10,
+      "regen_minutes": 30,
+      "league_battle_cost": 1,
+      "practice_battle_cost": 0
+    }
+  },
+  "gacha": {
+    "mercenary_banner": {
+      "cost": { "currency": "crystals", "amount": 300 },
+      "ten_pull_cost": { "currency": "crystals", "amount": 2700 },
+      "rates": {
+        "legendary": 0.03,
+        "epic": 0.10,
+        "rare": 0.35,
+        "common": 0.52
+      },
+      "pity_system": {
+        "legendary_pity": 90,
+        "epic_pity": 10
+      }
+    }
+  },
+  "season_pass": {
+    "price_usd": 9.99,
+    "duration_days": 30,
+    "free_track": {
+      "rewards_count": 30,
+      "includes": ["gold", "crystals", "equipment"]
+    },
+    "premium_track": {
+      "rewards_count": 30,
+      "exclusive_mercenary": true,
+      "bonus_crystals": 3000,
+      "includes": ["legendary_mercenary", "gold", "crystals", "equipment", "upgrade_materials"]
+    }
+  }
+}
