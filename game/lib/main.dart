@@ -9,6 +9,7 @@ import 'game/arena_game.dart';
 import 'features/league/league_manager.dart';
 import 'features/hero/hero_data.dart';
 import 'screens/battle_result_screen.dart';
+import 'screens/inventory_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -167,9 +168,27 @@ class ArenaScreen extends StatelessWidget {
           const Divider(color: AppColors.textDisabled),
 
           // My Team
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text("My Team (Max 5)", style: AppTextStyles.subHeader),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                const Text("My Team (Max 5)", style: AppTextStyles.subHeader),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const InventoryScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.inventory_2, size: 18),
+                  label: const Text('INVENTORY'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
           ),
           Container(
             height: 120,

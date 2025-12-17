@@ -216,6 +216,12 @@ class LeagueManager extends ChangeNotifier {
       _gold -= hero.cost;
       _heroInventory.add(hero);
       _shopList.remove(hero);
+
+      // Auto-add to team if space available
+      if (_myTeam.length < 5) {
+        _myTeam.add(hero);
+      }
+
       notifyListeners();
     }
   }
@@ -224,6 +230,7 @@ class LeagueManager extends ChangeNotifier {
   void addToTeam(HeroData hero) {
     if (_myTeam.length >= 5) return; // Max team size
     if (!_heroInventory.contains(hero)) return;
+    if (_myTeam.contains(hero)) return; // Already in team
 
     _myTeam.add(hero);
     notifyListeners();
@@ -233,6 +240,25 @@ class LeagueManager extends ChangeNotifier {
   void removeFromTeam(HeroData hero) {
     _myTeam.remove(hero);
     notifyListeners();
+  }
+
+  /// Sell hero from inventory
+  void sellHero(HeroData hero) {
+    if (!_heroInventory.contains(hero)) return;
+
+    // Remove from team if in team
+    _myTeam.remove(hero);
+
+    // Remove from inventory and refund 50% of cost
+    _heroInventory.remove(hero);
+    _gold += (hero.cost * 0.5).toInt();
+
+    notifyListeners();
+  }
+
+  /// Check if hero is in team
+  bool isInTeam(HeroData hero) {
+    return _myTeam.contains(hero);
   }
 
   /// Battle Logic - Generate enemy team
