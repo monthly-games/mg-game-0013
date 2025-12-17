@@ -5,6 +5,7 @@ import '../hero/hero_data.dart';
 import '../skill/skill_data.dart';
 import '../equipment/equipment_data.dart';
 import 'league_data.dart';
+import 'battle_result_data.dart';
 
 class LeagueManager extends ChangeNotifier {
   // Resources
@@ -62,6 +63,12 @@ class LeagueManager extends ChangeNotifier {
   bool _inBattle = false;
   bool get inBattle => _inBattle;
 
+  // Battle Result
+  BattleResultData? _lastBattleResult;
+  BattleResultData? get lastBattleResult => _lastBattleResult;
+  bool _showingResult = false;
+  bool get showingResult => _showingResult;
+
   LeagueManager() {
     _initializeSeason();
     refreshShop();
@@ -90,8 +97,12 @@ class LeagueManager extends ChangeNotifier {
   }
 
   /// End battle and process results
-  void endBattle(bool win) {
+  void endBattle(bool win, {int allyUnitsRemaining = 0, int enemyUnitsKilled = 0}) {
     _inBattle = false;
+
+    // Store state before changes
+    final previousPoints = _leaguePoints;
+    final previousTier = _currentTier;
 
     // Determine opponent tier (same or ±1 tier for now)
     final rand = Random();
@@ -129,6 +140,30 @@ class LeagueManager extends ChangeNotifier {
       pointsLost: win ? 0 : pointsChange.abs(),
     ));
 
+    // Create battle result data
+    _lastBattleResult = BattleResultData(
+      isVictory: win,
+      goldEarned: goldReward,
+      pointsChanged: pointsChange,
+      previousPoints: previousPoints,
+      newPoints: _leaguePoints,
+      previousTier: previousTier,
+      newTier: _currentTier,
+      tierChanged: previousTier != _currentTier,
+      totalWins: _wins,
+      totalLosses: _losses,
+      winRate: winRate,
+      allyUnitsRemaining: allyUnitsRemaining,
+      enemyUnitsKilled: enemyUnitsKilled,
+    );
+
+    _showingResult = true;
+    notifyListeners();
+  }
+
+  /// Close battle result screen
+  void closeBattleResult() {
+    _showingResult = false;
     notifyListeners();
   }
 

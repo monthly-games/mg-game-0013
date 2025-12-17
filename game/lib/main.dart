@@ -8,6 +8,7 @@ import 'package:mg_common_game/core/ui/theme/app_text_styles.dart';
 import 'game/arena_game.dart';
 import 'features/league/league_manager.dart';
 import 'features/hero/hero_data.dart';
+import 'screens/battle_result_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +55,17 @@ class ArenaScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       body: Consumer<LeagueManager>(
         builder: (context, lm, child) {
+          // Show battle result screen
+          if (lm.showingResult && lm.lastBattleResult != null) {
+            return BattleResultScreen(
+              result: lm.lastBattleResult!,
+              onClose: () {
+                lm.closeBattleResult();
+              },
+            );
+          }
+
+          // Show battle
           if (lm.inBattle) {
             return Stack(
               children: [
@@ -66,7 +78,7 @@ class ArenaScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                // Overlay for battle info?
+                // Overlay for battle info
                 Positioned(
                   top: 20,
                   left: 0,
@@ -82,9 +94,10 @@ class ArenaScreen extends StatelessWidget {
                 ),
               ],
             );
-          } else {
-            return _buildLobby(context, lm);
           }
+
+          // Show lobby
+          return _buildLobby(context, lm);
         },
       ),
     );
