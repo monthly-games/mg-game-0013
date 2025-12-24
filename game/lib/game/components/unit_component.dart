@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import 'dart:math';
-import 'damage_text.dart';
+import 'package:flame/effects.dart';
+import 'damage_text_component.dart';
 import 'arena_projectile.dart';
 import 'simple_particle.dart';
 import '../arena_game.dart';
@@ -26,6 +27,9 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
   double get critRate => data.critRate;
   double get critDamage => data.critDamage;
 
+  // Helpers
+  bool get isDead => state == UnitState.dead;
+
   // Skill System
   double _skillCooldownTimer = 0.0;
   bool get canUseSkill => _skillCooldownTimer <= 0;
@@ -38,7 +42,8 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
   UnitState state = UnitState.idle;
   UnitComponent? target;
   double _attackTimer = 0.0;
-  double get attackInterval => 1.0 / (data.speed / 50.0); // Speed affects attack speed
+  double get attackInterval =>
+      1.0 / (data.speed / 50.0); // Speed affects attack speed
 
   UnitComponent({
     required this.team,
@@ -141,6 +146,9 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       // Normal attack
       if (_attackTimer >= attackInterval) {
         _attackTimer = 0;
+        if (target != null) {
+          _playAttackAnimation(target!.position);
+        }
         _performAttack();
       }
     } else {
@@ -226,12 +234,14 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       case SkillTarget.enemy:
         if (target != null) {
           if (data.job == HeroJob.archer || data.job == HeroJob.mage) {
-            gameRef.add(ArenaProjectile(
-              position: position.clone(),
-              target: target!,
-              damage: damage,
-              color: Colors.purpleAccent,
-            ));
+            gameRef.add(
+              ArenaProjectile(
+                position: position.clone(),
+                target: target!,
+                damage: damage,
+                color: Colors.purpleAccent,
+              ),
+            );
           } else {
             target!.takeDamage(damage);
           }
@@ -361,8 +371,37 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     );
   }
 
+  // Effects
+  void _playAttackAnimation(Vector2 targetPos) {
+    if ((targetPos - position).length < 10) return; // Too close
+    final direction = (targetPos - position).normalized();
+
+    // Simple Lunge
+    add(
+      MoveEffect.to(
+        position + direction * 10,
+        EffectController(duration: 0.1, reverseDuration: 0.1),
+      ),
+    );
+  }
+
+  void _playHitAnimation() {
+    // Flash red or shake
+    // In a real sprite component, we'd manipulate the sprite's paint or use a ColorEffect.
+    // Since we are using render() override or sprites, let's use a ColorEffect if possible,
+    // but ColorEffect works best on SpriteComponent.
+    // For now, let's just shake it.
+    add(
+      MoveEffect.by(
+        Vector2(5, 0),
+        EffectController(duration: 0.05, reverseDuration: 0.05, repeatCount: 2),
+      ),
+    );
+  }
+
   void takeDamage(double amount, {bool isCrit = false}) {
     _playSfx(isCrit ? 'crit.wav' : 'hit.wav');
+    _playHitAnimation();
 
     // Apply defense reduction
     final finalDamage = (amount - defense).clamp(1, amount);
@@ -371,15 +410,10 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     // Show Damage Text
     gameRef.add(
       DamageTextComponent(
-        damage: finalDamage,
+        damage: finalDamage.toDouble(),
         position: position.clone() + Vector2(0, -20),
-      )..textRenderer = TextPaint(
-          style: TextStyle(
-            color: isCrit ? Colors.yellow : Colors.white,
-            fontSize: isCrit ? 16 : 12,
-            fontWeight: isCrit ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
+        isCrit: isCrit,
+      ),
     );
   }
 
@@ -389,90 +423,30 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     } catch (_) {}
   }
 
+  Sprite? _sprite;
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    // Load sprite based on job
+    try {
+      _sprite = await gameRef.loadSprite('heroes/hero_${data.job.name}.png');
+    } catch (e) {
+      print('Failed to load sprite for ${data.job.name}: $e');
+    }
+  }
+
   @override
   void render(Canvas canvas) {
-    final color = team == UnitTeam.ally ? Colors.blue : Colors.red;
-    final paint = Paint()..color = color;
-
-    switch (data.job) {
-      case HeroJob.warrior:
-        // Round Rect
-        canvas.drawRRect(
-          RRect.fromRectAndRadius(
-            Rect.fromLTWH(0, 0, width, height),
-            const Radius.circular(8),
-          ),
-          paint,
-        );
-        break;
-      case HeroJob.tank:
-        // Large Box with border
-        canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
-        canvas.drawRect(
-          Rect.fromLTWH(0, 0, width, height),
-          Paint()
-            ..color = Colors.black
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 2,
-        );
-        break;
-      case HeroJob.mage:
-        // Diamond
-        final path = Path();
-        path.moveTo(width / 2, 0); // Top
-        path.lineTo(width, height / 2); // Right
-        path.lineTo(width / 2, height); // Bottom
-        path.lineTo(0, height / 2); // Left
-        path.close();
-        canvas.drawPath(path, paint);
-        break;
-      case HeroJob.archer:
-        // Triangle
-        final path = Path();
-        if (team == UnitTeam.ally) {
-          path.moveTo(0, 0); // Top Left
-          path.lineTo(width, height / 2); // Right Mid
-          path.lineTo(0, height); // Bot Left
-        } else {
-          path.moveTo(width, 0); // Top Right
-          path.lineTo(0, height / 2); // Left Mid
-          path.lineTo(width, height); // Bot Right
-        }
-        path.close();
-        canvas.drawPath(path, paint);
-        break;
-      case HeroJob.assassin:
-        // Inverted Triangle / Dagger
-        final path = Path();
-        path.moveTo(0, 0);
-        path.lineTo(width, 0);
-        path.lineTo(width / 2, height);
-        path.close();
-        canvas.drawPath(path, paint);
-        break;
-      case HeroJob.healer:
-        // Cross (+)
-        canvas.drawRect(
-          Rect.fromLTWH(width / 3, 0, width / 3, height),
-          paint,
-        ); // Vertical
-        canvas.drawRect(
-          Rect.fromLTWH(0, height / 3, width, height / 3),
-          paint,
-        ); // Horizontal
-        break;
+    // Render sprite if available
+    if (_sprite != null) {
+      _sprite!.render(canvas, size: size);
+    } else {
+      // Fallback rendering
+      final color = team == UnitTeam.ally ? Colors.blue : Colors.red;
+      final paint = Paint()..color = color;
+      canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
     }
-
-    // Job Icon (Letter)
-    final textPaint = TextPaint(
-      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-    );
-    textPaint.render(
-      canvas,
-      data.job.name[0].toUpperCase(),
-      Vector2(width / 2, height / 2),
-      anchor: Anchor.center,
-    );
 
     // HP Bar
     final hpRatio = hp / maxHp;

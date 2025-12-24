@@ -97,7 +97,11 @@ class InventoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTeamSlotFilled(BuildContext context, LeagueManager lm, HeroData hero) {
+  Widget _buildTeamSlotFilled(
+    BuildContext context,
+    LeagueManager lm,
+    HeroData hero,
+  ) {
     return GestureDetector(
       onTap: () => _showHeroDetails(context, lm, hero),
       child: Container(
@@ -142,11 +146,7 @@ class InventoryScreen extends StatelessWidget {
         border: Border.all(color: AppColors.textDisabled, width: 1),
       ),
       child: Center(
-        child: Icon(
-          Icons.add,
-          color: AppColors.textDisabled,
-          size: 32,
-        ),
+        child: Icon(Icons.add, color: AppColors.textDisabled, size: 32),
       ),
     );
   }
@@ -172,7 +172,7 @@ class InventoryScreen extends StatelessWidget {
           Text(
             'Recruit heroes from the shop',
             style: AppTextStyles.caption.copyWith(
-              color: AppColors.textLowEmphasis,
+              color: AppColors.textDisabled,
             ),
           ),
         ],
@@ -213,7 +213,10 @@ class InventoryScreen extends StatelessWidget {
                 // In Team Badge
                 if (isInTeam)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.circular(4),
@@ -266,7 +269,7 @@ class InventoryScreen extends StatelessWidget {
                 Text(
                   'Lv.${hero.level}',
                   style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textLowEmphasis,
+                    color: AppColors.textDisabled,
                     fontSize: 8,
                   ),
                 ),
@@ -327,8 +330,14 @@ class InventoryScreen extends StatelessWidget {
               _buildStatBar('ATK', hero.attack, 50, Colors.red),
               _buildStatBar('DEF', hero.defense, 30, Colors.blue),
               _buildStatBar('SPD', hero.speed, 100, Colors.orange),
-              _buildDetailRow('Crit Rate', '${(hero.critRate * 100).toStringAsFixed(1)}%'),
-              _buildDetailRow('Crit Damage', '${(hero.critDamage * 100).toStringAsFixed(0)}%'),
+              _buildDetailRow(
+                'Crit Rate',
+                '${(hero.critRate * 100).toStringAsFixed(1)}%',
+              ),
+              _buildDetailRow(
+                'Crit Damage',
+                '${(hero.critDamage * 100).toStringAsFixed(0)}%',
+              ),
               _buildDetailRow('Range', hero.range.toStringAsFixed(0)),
 
               const Divider(color: AppColors.textDisabled),
@@ -353,7 +362,7 @@ class InventoryScreen extends StatelessWidget {
               Text(
                 'Cooldown: ${hero.skill.cooldown}s',
                 style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textLowEmphasis,
+                  color: AppColors.textDisabled,
                 ),
               ),
             ],
@@ -380,11 +389,11 @@ class InventoryScreen extends StatelessWidget {
                     Navigator.pop(context);
                   }
                 : (lm.myTeam.length < 5
-                    ? () {
-                        lm.addToTeam(hero);
-                        Navigator.pop(context);
-                      }
-                    : null),
+                      ? () {
+                          lm.addToTeam(hero);
+                          Navigator.pop(context);
+                        }
+                      : null),
             child: Text(
               isInTeam ? 'REMOVE FROM TEAM' : 'ADD TO TEAM',
               style: TextStyle(
@@ -411,7 +420,9 @@ class InventoryScreen extends StatelessWidget {
         title: const Text('Sell Mercenary?', style: AppTextStyles.subHeader),
         content: Text(
           'Sell ${hero.name} for ${(hero.cost * 0.5).toInt()} 💰?\n\nThis action cannot be undone.',
-          style: AppTextStyles.body.copyWith(color: AppColors.textMediumEmphasis),
+          style: AppTextStyles.body.copyWith(
+            color: AppColors.textMediumEmphasis,
+          ),
         ),
         actions: [
           TextButton(

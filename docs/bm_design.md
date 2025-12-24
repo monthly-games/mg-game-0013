@@ -1,7 +1,13 @@
-# 아레나 레전드: 용병 리그 - BM 설계 문서
+﻿# 아레나 레전드: 용병 리그 - BM 설계 문서
 
 > game_id: game_0013
 > repo: mg-game-0013
+> title_kr: 아레나 레전드: 용병 리그
+> title_en: Arena Legends: Mercenary League
+> genre_tags: auto_battler, league, pvp
+> doc_type: bm_design
+> source_of_truth: docs/design/gdd_game_0013.json
+> last_updated: 2025-12-19
 
 ---
 

@@ -10,28 +10,28 @@ class SkillRegistry {
 
     // Register all skills
     _registerSkill(Skills.slash);
-    _registerSkill(Skills.charge);
     _registerSkill(Skills.whirlwind);
+    _registerSkill(Skills.battleCry); // Replaced charge
 
     _registerSkill(Skills.preciseShot);
-    _registerSkill(Skills.multishot);
+    _registerSkill(Skills.multiShot); // Fixed typo
     _registerSkill(Skills.poisonArrow);
 
     _registerSkill(Skills.fireball);
-    _registerSkill(Skills.frostbolt);
-    _registerSkill(Skills.arcaneBlast);
+    _registerSkill(Skills.frostNova); // Replaced frostbolt
+    _registerSkill(Skills.arcaneBarrier); // Replaced arcaneBlast
 
     _registerSkill(Skills.shieldBash);
     _registerSkill(Skills.taunt);
-    _registerSkill(Skills.ironWall);
+    _registerSkill(Skills.ironWill); // Replaced ironWall
 
     _registerSkill(Skills.backstab);
     _registerSkill(Skills.shadowStep);
-    _registerSkill(Skills.criticalStrike);
+    _registerSkill(Skills.executioner); // Replaced criticalStrike
 
     _registerSkill(Skills.heal);
     _registerSkill(Skills.bless);
-    _registerSkill(Skills.resurrection);
+    _registerSkill(Skills.groupHeal); // Replaced resurrection
   }
 
   static void _registerSkill(SkillData skill) {

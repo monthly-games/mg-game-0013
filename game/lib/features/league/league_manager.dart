@@ -1,303 +1,206 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'dart:math';
+import '../../core/storage/storage_service.dart';
 import '../hero/hero_data.dart';
-import '../skill/skill_data.dart';
-import '../equipment/equipment_data.dart';
-import 'league_data.dart';
-import 'battle_result_data.dart';
 
-class LeagueManager extends ChangeNotifier {
-  // Resources
-  int _gold = 1000;
-  int _crystal = 100;
-  int _battleTickets = 10;
+enum LeagueDivision {
+  bronze(0, "Bronze"),
+  silver(100, "Silver"),
+  gold(250, "Gold"),
+  platinum(500, "Platinum"),
+  diamond(800, "Diamond"),
+  master(1200, "Master");
 
+  final int minLp;
+  final String label;
+  const LeagueDivision(this.minLp, this.label);
+}
+
+class LeagueManager with ChangeNotifier {
+  // Singleton
+  static final LeagueManager _instance = LeagueManager._internal();
+  factory LeagueManager() => _instance;
+  LeagueManager._internal();
+
+  final StorageService _storage = StorageService();
+
+  // Currencies
+  int _gold = 0;
   int get gold => _gold;
-  int get crystal => _crystal;
-  int get battleTickets => _battleTickets;
 
-  // League System
-  int _leaguePoints = 0;
-  LeagueTier _currentTier = LeagueTier.bronze;
-  int _wins = 0;
-  int _losses = 0;
-  final List<MatchData> _matchHistory = [];
+  int _crystals = 0;
+  int get crystals => _crystals;
 
-  int get leaguePoints => _leaguePoints;
-  LeagueTier get currentTier => _currentTier;
-  LeagueTierData get currentTierData => LeagueTiers.getByTier(_currentTier);
-  int get wins => _wins;
-  int get losses => _losses;
-  List<MatchData> get matchHistory => List.unmodifiable(_matchHistory);
+  int _tickets = 0;
+  int get tickets => _tickets;
 
-  double get winRate {
-    final total = _wins + _losses;
-    return total > 0 ? _wins / total : 0.0;
+  // League
+  int _currentLp = 0;
+  int get currentLp => _currentLp;
+
+  LeagueDivision get currentDivision {
+    for (var div in LeagueDivision.values.reversed) {
+      if (_currentLp >= div.minLp) return div;
+    }
+    return LeagueDivision.bronze;
   }
 
-  // Season
-  SeasonData? _currentSeason;
-  SeasonData? get currentSeason => _currentSeason;
+  // Inventory
+  List<HeroData> _heroes = [];
+  List<HeroData> get heroes => List.unmodifiable(_heroes);
 
-  // Team
-  final List<HeroData> _myTeam = [];
-  List<HeroData> get myTeam => List.unmodifiable(_myTeam);
-
-  // Hero Inventory
-  final List<HeroData> _heroInventory = [];
-  List<HeroData> get heroInventory => List.unmodifiable(_heroInventory);
-
-  // Equipment Inventory
-  final List<EquipmentData> _equipmentInventory = [];
-  List<EquipmentData> get equipmentInventory => List.unmodifiable(_equipmentInventory);
-
-  // Shop
-  final List<HeroData> _shopList = [];
-  List<HeroData> get shopList => List.unmodifiable(_shopList);
-
-  // Battle State
-  final List<HeroData> _enemyTeam = [];
-  List<HeroData> get enemyTeam => List.unmodifiable(_enemyTeam);
-
-  bool _inBattle = false;
-  bool get inBattle => _inBattle;
-
-  // Battle Result
-  BattleResultData? _lastBattleResult;
-  BattleResultData? get lastBattleResult => _lastBattleResult;
-  bool _showingResult = false;
-  bool get showingResult => _showingResult;
-
-  LeagueManager() {
-    _initializeSeason();
-    refreshShop();
+  List<String> _myTeamIds = [];
+  List<HeroData> get myTeam {
+    return _myTeamIds
+        .map(
+          (id) => _heroes.firstWhere(
+            (h) => h.id == id,
+            orElse: () => _heroes.first,
+          ),
+        )
+        .toList();
   }
 
-  /// Initialize season
-  void _initializeSeason() {
-    _currentSeason = SeasonData(
-      seasonNumber: 1,
-      name: 'Season 1',
-      startDate: DateTime.now(),
-      endDate: DateTime.now().add(const Duration(days: 30)),
-      durationDays: 30,
-    );
-  }
+  Future<void> initialize() async {
+    await _storage.initialize();
 
-  /// Start battle
-  void startBattle() {
-    if (_myTeam.isEmpty) return;
-    if (_battleTickets <= 0) return;
+    _gold = _storage.gold;
+    _crystals = _storage.crystals;
+    _tickets = _storage.tickets;
+    _currentLp = _storage.lp;
 
-    _battleTickets--;
-    generateEnemyTeam();
-    _inBattle = true;
+    _heroes = _storage.getHeroes();
+    _myTeamIds = _storage.getMyTeam();
+
+    // Starter pack if empty
+    if (_heroes.isEmpty) {
+      _heroes.add(
+        HeroData.random().copyWith(
+          job: HeroJob.warrior,
+          rarity: HeroRarity.common,
+        ),
+      );
+      _heroes.add(
+        HeroData.random().copyWith(
+          job: HeroJob.archer,
+          rarity: HeroRarity.common,
+        ),
+      );
+      _heroes.add(
+        HeroData.random().copyWith(
+          job: HeroJob.healer,
+          rarity: HeroRarity.common,
+        ),
+      );
+      await _storage.saveHeroes(_heroes);
+    }
+
+    if (_myTeamIds.isEmpty && _heroes.isNotEmpty) {
+      _myTeamIds = _heroes.take(5).map((h) => h.id).toList();
+      await _storage.saveMyTeam(_myTeamIds);
+    }
+
     notifyListeners();
   }
 
-  /// End battle and process results
-  void endBattle(bool win, {int allyUnitsRemaining = 0, int enemyUnitsKilled = 0}) {
-    _inBattle = false;
+  // --- Actions ---
 
-    // Store state before changes
-    final previousPoints = _leaguePoints;
-    final previousTier = _currentTier;
+  Future<void> addLp(int amount) async {
+    _currentLp = (_currentLp + amount).clamp(0, 9999);
+    await _storage.saveLeague(lp: _currentLp);
+    notifyListeners();
+  }
 
-    // Determine opponent tier (same or ±1 tier for now)
-    final rand = Random();
-    final tierDiff = rand.nextInt(3) - 1; // -1, 0, or 1
-    final opponentTierIndex = (_currentTier.index + tierDiff).clamp(0, LeagueTier.values.length - 1);
-    final opponentTier = LeagueTier.values[opponentTierIndex];
+  Future<void> addGold(int amount) async {
+    _gold += amount;
+    await _saveCurrencies();
+  }
 
-    // Calculate points
-    final tierData = currentTierData;
-    int pointsChange = 0;
-    int goldReward = 0;
+  Future<void> addReward(int goldReward, int lpReward) async {
+    _gold += goldReward;
+    _currentLp = (_currentLp + lpReward).clamp(0, 9999);
 
-    if (win) {
-      _wins++;
-      pointsChange = tierData.getWinPoints(opponentTier);
-      goldReward = 100 + (_currentTier.index * 50);
-      _gold += goldReward;
+    await _saveCurrencies();
+    await _storage.saveLeague(lp: _currentLp);
+    notifyListeners();
+  }
+
+  bool spendTicket() {
+    if (_tickets > 0) {
+      _tickets--;
+      _saveCurrencies();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> _saveCurrencies() async {
+    await _storage.saveCurrencies(
+      gold: _gold,
+      crystals: _crystals,
+      tickets: _tickets,
+    );
+    notifyListeners();
+  }
+
+  void addToTeam(String heroId) {
+    if (_myTeamIds.contains(heroId)) return;
+    if (_myTeamIds.length >= 5) return;
+
+    _myTeamIds.add(heroId);
+    _storage.saveMyTeam(_myTeamIds);
+    notifyListeners();
+  }
+
+  void removeFromTeam(String heroId) {
+    _myTeamIds.remove(heroId);
+    _storage.saveMyTeam(_myTeamIds);
+    notifyListeners();
+  }
+
+  // --- Recruitment & Management ---
+
+  Future<HeroData?> recruitHero(bool isPremium) async {
+    int cost = isPremium ? 100 : 100; // 100 Crystals vs 100 Gold
+    if (isPremium) {
+      if (_crystals < cost) return null;
+      _crystals -= cost;
     } else {
-      _losses++;
-      pointsChange = -tierData.getLosePoints(opponentTier);
+      if (_gold < cost) return null;
+      _gold -= cost;
+    }
+    await _saveCurrencies();
+
+    // Rarity Weights
+    Map<HeroRarity, double>? weights;
+    if (isPremium) {
+      weights = {
+        HeroRarity.common: 30,
+        HeroRarity.uncommon: 40,
+        HeroRarity.rare: 20,
+        HeroRarity.epic: 8,
+        HeroRarity.legendary: 2,
+      };
+    } else {
+      weights = {
+        HeroRarity.common: 70,
+        HeroRarity.uncommon: 25,
+        HeroRarity.rare: 4.8,
+        HeroRarity.epic: 0.2,
+        HeroRarity.legendary: 0,
+      };
     }
 
-    _leaguePoints = (_leaguePoints + pointsChange).clamp(0, 99999);
-
-    // Check tier promotion/relegation
-    _updateTier();
-
-    // Record match history
-    _matchHistory.add(MatchData(
-      matchId: const Uuid().v4(),
-      tier: _currentTier,
-      timestamp: DateTime.now(),
-      isWin: win,
-      pointsGained: win ? pointsChange : 0,
-      pointsLost: win ? 0 : pointsChange.abs(),
-    ));
-
-    // Create battle result data
-    _lastBattleResult = BattleResultData(
-      isVictory: win,
-      goldEarned: goldReward,
-      pointsChanged: pointsChange,
-      previousPoints: previousPoints,
-      newPoints: _leaguePoints,
-      previousTier: previousTier,
-      newTier: _currentTier,
-      tierChanged: previousTier != _currentTier,
-      totalWins: _wins,
-      totalLosses: _losses,
-      winRate: winRate,
-      allyUnitsRemaining: allyUnitsRemaining,
-      enemyUnitsKilled: enemyUnitsKilled,
-    );
-
-    _showingResult = true;
+    final newHero = HeroData.random(weights);
+    _heroes.add(newHero);
+    await _storage.saveHeroes(_heroes);
     notifyListeners();
+    return newHero;
   }
 
-  /// Close battle result screen
-  void closeBattleResult() {
-    _showingResult = false;
-    notifyListeners();
-  }
-
-  /// Update tier based on points
-  void _updateTier() {
-    final newTierData = LeagueTiers.getByPoints(_leaguePoints);
-    if (newTierData.tier != _currentTier) {
-      _currentTier = newTierData.tier;
-      // Could trigger promotion/relegation rewards here
-    }
-  }
-
-  /// Add resources
-  void addGold(int amount) {
-    _gold = (_gold + amount).clamp(0, 999999999);
-    notifyListeners();
-  }
-
-  void addCrystal(int amount) {
-    _crystal = (_crystal + amount).clamp(0, 999999999);
-    notifyListeners();
-  }
-
-  void addBattleTickets(int amount) {
-    _battleTickets = (_battleTickets + amount).clamp(0, 999);
-    notifyListeners();
-  }
-
-  /// Shop Logic
-  void refreshShop() {
-    const rerollCost = 10;
-    if (_gold < rerollCost) return;
-
-    _gold -= rerollCost;
-    _shopList.clear();
-
-    // Generate 3-5 heroes based on tier
-    final shopSize = 3 + (_currentTier.index ~/ 2).clamp(0, 2);
-    for (int i = 0; i < shopSize; i++) {
-      _shopList.add(HeroData.random());
-    }
-    notifyListeners();
-  }
-
-  /// Recruit hero from shop
-  void recruit(HeroData hero) {
-    if (_gold >= hero.cost) {
-      if (_heroInventory.length >= 30) return; // Max inventory
-
-      _gold -= hero.cost;
-      _heroInventory.add(hero);
-      _shopList.remove(hero);
-
-      // Auto-add to team if space available
-      if (_myTeam.length < 5) {
-        _myTeam.add(hero);
-      }
-
-      notifyListeners();
-    }
-  }
-
-  /// Add hero to team
-  void addToTeam(HeroData hero) {
-    if (_myTeam.length >= 5) return; // Max team size
-    if (!_heroInventory.contains(hero)) return;
-    if (_myTeam.contains(hero)) return; // Already in team
-
-    _myTeam.add(hero);
-    notifyListeners();
-  }
-
-  /// Remove hero from team
-  void removeFromTeam(HeroData hero) {
-    _myTeam.remove(hero);
-    notifyListeners();
-  }
-
-  /// Sell hero from inventory
-  void sellHero(HeroData hero) {
-    if (!_heroInventory.contains(hero)) return;
-
-    // Remove from team if in team
-    _myTeam.remove(hero);
-
-    // Remove from inventory and refund 50% of cost
-    _heroInventory.remove(hero);
-    _gold += (hero.cost * 0.5).toInt();
-
-    notifyListeners();
-  }
-
-  /// Check if hero is in team
-  bool isInTeam(HeroData hero) {
-    return _myTeam.contains(hero);
-  }
-
-  /// Battle Logic - Generate enemy team
-  void generateEnemyTeam() {
-    _enemyTeam.clear();
-
-    // Enemy count based on tier (3-5 units)
-    final enemyCount = 3 + (_currentTier.index ~/ 2).clamp(0, 2);
-
-    for (int i = 0; i < enemyCount; i++) {
-      _enemyTeam.add(HeroData.random());
-    }
-    notifyListeners();
-  }
-
-  /// Claim daily rewards
-  void claimDailyRewards() {
-    final tierData = currentTierData;
-    addGold(tierData.dailyGoldReward);
-    addCrystal(tierData.dailyCrystalReward);
-    notifyListeners();
-  }
-
-  /// End season and give rewards
-  void endSeason() {
-    if (_currentSeason == null) return;
-
-    final tierData = currentTierData;
-    addGold(tierData.seasonGoldReward);
-    addCrystal(tierData.seasonCrystalReward);
-
-    // Reset for new season
-    _leaguePoints = 0;
-    _currentTier = LeagueTier.bronze;
-    _wins = 0;
-    _losses = 0;
-    _matchHistory.clear();
-
-    _currentSeason = SeasonData.createNextSeason(_currentSeason!);
+  Future<void> updateTeam(List<String> newTeamIds) async {
+    if (newTeamIds.length > 5) return;
+    _myTeamIds = List.from(newTeamIds);
+    await _storage.saveMyTeam(_myTeamIds);
     notifyListeners();
   }
 }
