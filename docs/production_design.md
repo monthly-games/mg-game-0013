@@ -257,26 +257,27 @@ int softReset(int currentTrophies) {
 ## 6. 프로덕션 체크리스트
 
 ### 핵심 기능
-- [ ] 오토배틀 시스템
-- [ ] 용병 수집/강화
-- [ ] PvP 매칭
-- [ ] 리그/티어 시스템
+- [x] 오토배틀 시스템 (UnitComponent: 자동 이동/공격/스킬)
+- [x] 용병 수집/강화 (HeroData: 6직업, 5등급, 레벨/경험치)
+- [ ] PvP 매칭 (비동기)
+- [x] 리그/티어 시스템 (LeagueManager: 6단계 Bronze~Master, LP 기반)
 - [ ] 시즌 패스
 
 ### 콘텐츠
-- [ ] 50+ 용병
-- [ ] 7 리그 티어
+- [ ] 50+ 용병 (현재 랜덤 생성 기반)
+- [x] 6 리그 티어 (Bronze/Silver/Gold/Platinum/Diamond/Master)
 - [ ] 시너지 시스템
 - [ ] 튜토리얼
 
 ### 메타 시스템
-- [ ] 시즌 시스템
+- [x] 영웅 저장/로드 (StorageService: heroes, team, currencies)
+- [x] 팀 편성 (5인 팀, addToTeam/removeFromTeam)
 - [ ] 일일/주간 퀘스트
 - [ ] 길드 시스템
 - [ ] 리더보드
 
 ### 수익화
-- [ ] 가챠 시스템
+- [x] 가챠 시스템 (recruitHero: 일반/프리미엄, 등급별 확률)
 - [ ] 시즌 패스
 - [ ] 광고 SDK
 - [ ] IAP 상품
