@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../features/hero/hero_data.dart';
-import '../../features/league/league_manager.dart';
 
 class StorageService {
   static const String _boxName = 'arena_legends_data';

@@ -145,7 +145,7 @@ class InventoryScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.textDisabled, width: 1),
       ),
-      child: Center(
+      child: const Center(
         child: Icon(Icons.add, color: AppColors.textDisabled, size: 32),
       ),
     );
@@ -156,7 +156,7 @@ class InventoryScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
+          const Icon(
             Icons.inventory_2_outlined,
             size: 80,
             color: AppColors.textDisabled,
@@ -324,7 +324,7 @@ class InventoryScreen extends StatelessWidget {
               const Divider(color: AppColors.textDisabled),
 
               // Stats
-              Text('Combat Stats', style: AppTextStyles.subHeader),
+              const Text('Combat Stats', style: AppTextStyles.subHeader),
               const SizedBox(height: 8),
               _buildStatBar('HP', hero.maxHp, 250, Colors.green),
               _buildStatBar('ATK', hero.attack, 50, Colors.red),
@@ -343,7 +343,7 @@ class InventoryScreen extends StatelessWidget {
               const Divider(color: AppColors.textDisabled),
 
               // Skill
-              Text('Skill', style: AppTextStyles.subHeader),
+              const Text('Skill', style: AppTextStyles.subHeader),
               const SizedBox(height: 8),
               Text(
                 hero.skill.name,

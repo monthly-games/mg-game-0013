@@ -34,7 +34,7 @@ class MGArenaHud extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.all(MGSpacing.sm),
+        padding: const EdgeInsets.all(MGSpacing.sm),
         child: Column(
           children: [
             // 상단 HUD
@@ -58,7 +58,7 @@ class MGArenaHud extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(width: MGSpacing.sm),
+                const SizedBox(width: MGSpacing.sm),
                 // 설정 버튼
                 if (onSettings != null)
                   MGIconButton(
@@ -75,7 +75,7 @@ class MGArenaHud extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: MGSpacing.xs),
+            const SizedBox(height: MGSpacing.xs),
             // 랭크 진행도
             _buildRankProgress(),
           ],
@@ -86,7 +86,7 @@ class MGArenaHud extends StatelessWidget {
 
   Widget _buildRankBadge() {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: MGSpacing.md,
         vertical: MGSpacing.xs,
       ),
@@ -111,7 +111,7 @@ class MGArenaHud extends StatelessWidget {
             color: Colors.white,
             size: 24,
           ),
-          SizedBox(width: MGSpacing.xs),
+          const SizedBox(width: MGSpacing.xs),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -139,7 +139,7 @@ class MGArenaHud extends StatelessWidget {
 
   Widget _buildRankProgress() {
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: MGSpacing.sm,
         vertical: MGSpacing.xs,
       ),
@@ -155,7 +155,7 @@ class MGArenaHud extends StatelessWidget {
               color: MGColors.textSecondary,
             ),
           ),
-          SizedBox(width: MGSpacing.sm),
+          const SizedBox(width: MGSpacing.sm),
           Expanded(
             child: MGLinearProgress(
               value: rankPoints / maxRankPoints,
@@ -164,7 +164,7 @@ class MGArenaHud extends StatelessWidget {
               progressColor: _getTierColor(),
             ),
           ),
-          SizedBox(width: MGSpacing.sm),
+          const SizedBox(width: MGSpacing.sm),
           Text(
             '$rankPoints / $maxRankPoints',
             style: MGTextStyles.caption.copyWith(

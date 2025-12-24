@@ -2,8 +2,8 @@ import 'package:flame_audio/flame_audio.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 
 class AudioManagerImpl extends AudioManager {
-  bool _isMusicOn = true;
-  bool _isSfxOn = true;
+  final bool _isMusicOn = true;
+  final bool _isSfxOn = true;
 
   @override
   Future<void> initialize() async {

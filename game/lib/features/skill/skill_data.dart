@@ -1,4 +1,5 @@
 /// Skill system for Arena Legends
+library;
 
 enum SkillType {
   damage,      // 데미지 스킬

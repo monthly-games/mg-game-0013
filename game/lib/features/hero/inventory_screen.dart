@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../features/league/league_manager.dart';
-import '../../features/hero/hero_data.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});

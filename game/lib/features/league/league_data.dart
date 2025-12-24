@@ -1,4 +1,5 @@
 /// League tier and season system for Arena Legends
+library;
 
 enum LeagueTier {
   bronze,    // 브론즈 (Starting)

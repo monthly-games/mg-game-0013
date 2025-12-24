@@ -1,4 +1,5 @@
 /// Battle result data for post-battle screen
+library;
 import 'league_data.dart';
 
 class BattleResultData {

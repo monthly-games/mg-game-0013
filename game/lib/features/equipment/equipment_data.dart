@@ -1,4 +1,5 @@
 /// Equipment system for Arena Legends
+library;
 import 'dart:math';
 import 'package:uuid/uuid.dart';
 import '../hero/hero_data.dart';
