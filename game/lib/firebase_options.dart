@@ -27,19 +27,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'YOUR_ANDROID_API_KEY',
-    appId: '1:000000000000:android:0013',
-    messagingSenderId: '000000000000',
+    apiKey: 'AIzaSyDCGcPrsolaAKddtr5dzAugwZrSvSXz7wE',
+    appId: '1:701294998464:android:fda81d42c87ae6c901ce25',
+    messagingSenderId: '701294998464',
     projectId: 'mg-games-dev',
-    storageBucket: 'mg-games-dev.appspot.com',
+    storageBucket: 'mg-games-dev.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'YOUR_IOS_API_KEY',
-    appId: '1:000000000000:ios:0013',
-    messagingSenderId: '000000000000',
+    apiKey: 'AIzaSyCGZ_0nsZeP8z_hN90984lOLpBUSVgNczU',
+    appId: '1:701294998464:ios:a0b193815b9c98e701ce25',
+    messagingSenderId: '701294998464',
     projectId: 'mg-games-dev',
-    storageBucket: 'mg-games-dev.appspot.com',
+    storageBucket: 'mg-games-dev.firebasestorage.app',
     iosBundleId: 'com.monthlygames.game0013',
   );
 
