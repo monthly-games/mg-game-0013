@@ -2,19 +2,19 @@
 library;
 
 enum SkillType {
-  damage,      // 데미지 스킬
-  heal,        // 힐 스킬
-  buff,        // 버프 스킬
-  debuff,      // 디버프 스킬
-  aoe,         // 광역 스킬
+  damage, // 데미지 스킬
+  heal, // 힐 스킬
+  buff, // 버프 스킬
+  debuff, // 디버프 스킬
+  aoe, // 광역 스킬
 }
 
 enum SkillTarget {
-  enemy,       // 적 단일 대상
-  ally,        // 아군 단일 대상
-  self,        // 자신
-  allEnemies,  // 모든 적
-  allAllies,   // 모든 아군
+  enemy, // 적 단일 대상
+  ally, // 아군 단일 대상
+  self, // 자신
+  allEnemies, // 모든 적
+  allAllies, // 모든 아군
 }
 
 class SkillData {
@@ -25,12 +25,12 @@ class SkillData {
   final SkillTarget target;
 
   // Cooldown
-  final double cooldown;      // 쿨다운 시간 (초)
+  final double cooldown; // 쿨다운 시간 (초)
 
   // Effect values
-  final double value;         // 스킬 효과 값 (데미지, 힐량 등)
-  final double? duration;     // 지속 시간 (버프/디버프)
-  final double? aoeRadius;    // AOE 범위
+  final double value; // 스킬 효과 값 (데미지, 힐량 등)
+  final double? duration; // 지속 시간 (버프/디버프)
+  final double? aoeRadius; // AOE 범위
 
   // Mana cost (if applicable)
   final double manaCost;
@@ -97,6 +97,8 @@ class Skills {
     target: SkillTarget.enemy,
     cooldown: 5.0,
     value: 1.5,
+    iconPath: 'skills/skill_slash.png',
+    animationName: 'skills/slash_effect.png',
   );
 
   static const whirlwind = SkillData(
@@ -108,6 +110,8 @@ class Skills {
     cooldown: 10.0,
     value: 1.0,
     aoeRadius: 150.0,
+    iconPath: 'skills/skill_slash.png', // Fallback or reusing slash icon
+    animationName: 'skills/whirlwind_effect.png',
   );
 
   static const battleCry = SkillData(
@@ -119,6 +123,9 @@ class Skills {
     cooldown: 15.0,
     value: 0.3,
     duration: 5.0,
+    iconPath:
+        'skills/skill_shield_bash.png', // Reusing shield bash icon as fallback
+    animationName: 'skills/charge_effect.png', // Fallback effect
   );
 
   // Archer skills
@@ -130,6 +137,8 @@ class Skills {
     target: SkillTarget.enemy,
     cooldown: 6.0,
     value: 2.0,
+    iconPath: 'skills/skill_fireball.png', // Placeholder
+    animationName: 'skills/precise_shot_effect.png',
   );
 
   static const multiShot = SkillData(
@@ -140,6 +149,8 @@ class Skills {
     target: SkillTarget.allEnemies,
     cooldown: 8.0,
     value: 0.8,
+    iconPath: 'skills/skill_fireball.png', // Placeholder
+    animationName: 'skills/multishot_effect.png',
   );
 
   static const poisonArrow = SkillData(
@@ -151,6 +162,8 @@ class Skills {
     cooldown: 10.0,
     value: 1.2,
     duration: 5.0,
+    iconPath: 'skills/skill_slash.png', // Placeholder
+    animationName: 'skills/poison_arrow_effect.png',
   );
 
   // Mage skills
@@ -163,6 +176,8 @@ class Skills {
     cooldown: 7.0,
     value: 1.8,
     manaCost: 30,
+    iconPath: 'skills/skill_fireball.png',
+    animationName: 'skills/fireball_effect.png',
   );
 
   static const frostNova = SkillData(
@@ -175,6 +190,8 @@ class Skills {
     value: 1.0,
     aoeRadius: 200.0,
     manaCost: 50,
+    iconPath: 'skills/skill_fireball.png', // Placeholder
+    animationName: 'skills/frostbolt_effect.png',
   );
 
   static const arcaneBarrier = SkillData(
@@ -187,6 +204,8 @@ class Skills {
     value: 0.5,
     duration: 5.0,
     manaCost: 40,
+    iconPath: 'skills/skill_heal.png', // Placeholder
+    animationName: 'skills/arcane_blast_effect.png',
   );
 
   // Tank skills
@@ -199,6 +218,8 @@ class Skills {
     cooldown: 8.0,
     value: 1.2,
     duration: 1.0,
+    iconPath: 'skills/skill_shield_bash.png',
+    animationName: 'skills/shield_bash_effect.png',
   );
 
   static const ironWill = SkillData(
@@ -210,6 +231,8 @@ class Skills {
     cooldown: 12.0,
     value: 0.5,
     duration: 5.0,
+    iconPath: 'skills/skill_shield_bash.png', // Placeholder
+    animationName: 'skills/iron_wall_effect.png',
   );
 
   static const taunt = SkillData(
@@ -221,6 +244,8 @@ class Skills {
     cooldown: 15.0,
     value: 1.0,
     duration: 3.0,
+    iconPath: 'skills/skill_shield_bash.png', // Placeholder
+    animationName: 'skills/taunt_effect.png',
   );
 
   // Assassin skills
@@ -232,6 +257,8 @@ class Skills {
     target: SkillTarget.enemy,
     cooldown: 8.0,
     value: 2.5,
+    iconPath: 'skills/skill_slash.png', // Placeholder
+    animationName: 'skills/backstab_effect.png',
   );
 
   static const shadowStep = SkillData(
@@ -243,6 +270,8 @@ class Skills {
     cooldown: 12.0,
     value: 0.5,
     duration: 3.0,
+    iconPath: 'skills/skill_slash.png', // Placeholder
+    animationName: 'skills/shadow_step_effect.png',
   );
 
   static const executioner = SkillData(
@@ -253,6 +282,8 @@ class Skills {
     target: SkillTarget.enemy,
     cooldown: 15.0,
     value: 4.0,
+    iconPath: 'skills/skill_slash.png', // Placeholder
+    animationName: 'skills/critical_strike_effect.png',
   );
 
   // Healer skills
@@ -265,6 +296,8 @@ class Skills {
     cooldown: 5.0,
     value: 0.4,
     manaCost: 25,
+    iconPath: 'skills/skill_heal.png',
+    animationName: 'skills/heal_effect.png',
   );
 
   static const groupHeal = SkillData(
@@ -276,6 +309,8 @@ class Skills {
     cooldown: 10.0,
     value: 0.25,
     manaCost: 50,
+    iconPath: 'skills/skill_heal.png', // Placeholder
+    animationName: 'skills/resurrection_effect.png',
   );
 
   static const bless = SkillData(
@@ -288,29 +323,31 @@ class Skills {
     value: 5.0,
     duration: 5.0,
     manaCost: 40,
+    iconPath: 'skills/skill_heal.png', // Placeholder
+    animationName: 'skills/bless_effect.png',
   );
 
   /// Get all skills as a list
   static List<SkillData> get all => [
-        slash,
-        whirlwind,
-        battleCry,
-        preciseShot,
-        multiShot,
-        poisonArrow,
-        fireball,
-        frostNova,
-        arcaneBarrier,
-        shieldBash,
-        ironWill,
-        taunt,
-        backstab,
-        shadowStep,
-        executioner,
-        heal,
-        groupHeal,
-        bless,
-      ];
+    slash,
+    whirlwind,
+    battleCry,
+    preciseShot,
+    multiShot,
+    poisonArrow,
+    fireball,
+    frostNova,
+    arcaneBarrier,
+    shieldBash,
+    ironWill,
+    taunt,
+    backstab,
+    shadowStep,
+    executioner,
+    heal,
+    groupHeal,
+    bless,
+  ];
 
   /// Get skills by ID
   static SkillData? getById(String id) {

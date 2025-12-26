@@ -39,6 +39,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
       final leagueManager = Provider.of<LeagueManager>(context, listen: false);
 
       if (isWin) {
+        GetIt.I<AudioManager>().playSfx('coin.wav');
         leagueManager.addReward(100, 25); // 100 Gold, 25 LP
       } else {
         leagueManager.addLp(-10);
@@ -90,27 +91,18 @@ class _LeagueScreenState extends State<LeagueScreen> {
                 ),
                 const SizedBox(height: 40),
 
-                // Division Icon (Mockup container for now)
-                Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.black45,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: _getDivColor(div), width: 4),
-                  ),
-                  child: Center(
-                    child: Text(
-                      div.label[0],
-                      style: TextStyle(fontSize: 48, color: _getDivColor(div)),
-                    ),
-                  ),
+                // Division Icon
+                Image.asset(
+                  _getDivAssetPath(div),
+                  width: 150,
+                  height: 150,
+                  fit: BoxFit.contain,
                 ),
                 const SizedBox(height: 20),
                 Text(
                   div.label,
-                  style: TextStyle(
-                    color: _getDivColor(div),
+                  style: const TextStyle(
+                    color: Colors.amber,
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
@@ -201,20 +193,20 @@ class _LeagueScreenState extends State<LeagueScreen> {
     );
   }
 
-  Color _getDivColor(LeagueDivision div) {
+  String _getDivAssetPath(LeagueDivision div) {
     switch (div) {
       case LeagueDivision.bronze:
-        return Colors.brown;
+        return 'assets/images/ui/tier_bronze.png';
       case LeagueDivision.silver:
-        return Colors.grey;
+        return 'assets/images/ui/tier_silver.png';
       case LeagueDivision.gold:
-        return Colors.amber;
+        return 'assets/images/ui/tier_gold.png';
       case LeagueDivision.platinum:
-        return Colors.cyanAccent;
+        return 'assets/images/ui/tier_platinum.png';
       case LeagueDivision.diamond:
-        return Colors.blueAccent;
+        return 'assets/images/ui/tier_diamond.png';
       case LeagueDivision.master:
-        return Colors.purpleAccent;
+        return 'assets/images/ui/tier_master.png';
     }
   }
 }

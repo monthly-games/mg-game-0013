@@ -105,6 +105,17 @@ class BattleScene extends FlameGame {
 
       async.Timer(const Duration(seconds: 2), () {
         _paused = true;
+
+        // Play Result Audio
+        if (isWin) {
+          GetIt.I<AudioManager>().playSfx('victory.wav');
+          GetIt.I<AudioManager>().playBgm('music/victory_theme.mp3');
+        } else {
+          GetIt.I<AudioManager>().playSfx('defeat.wav');
+          // Maybe play lobby theme or silence? Keep as is (battle bgm stops/continues?)
+          // Battle BGM is playing. Defeat SFX is long?
+        }
+
         if (buildContext != null) {
           showDialog(
             context: buildContext!,

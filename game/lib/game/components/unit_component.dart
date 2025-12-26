@@ -207,6 +207,12 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         ..text = "${skill.name}!",
     );
 
+    // Show skill icon above head if available
+    if (skill.iconPath != null) {
+      // Logic to spawn a temporary icon effect could go here,
+      // but for now we rely on the specific skill executions to show effects.
+    }
+
     // Execute skill based on type and target
     switch (skill.type) {
       case SkillType.damage:
@@ -234,15 +240,23 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       case SkillTarget.enemy:
         if (target != null) {
           if (data.job == HeroJob.archer || data.job == HeroJob.mage) {
+            // Projectile based skill
             gameRef.add(
               ArenaProjectile(
                 position: position.clone(),
                 target: target!,
                 damage: damage,
                 color: Colors.purpleAccent,
+                // Pass animation/icon path if we update ArenaProjectile (Task left for future refactor to keep it simple)
               ),
             );
           } else {
+            // Melee skill effect
+            if (skill.animationName != null) {
+              // TODO: Spawn sprite animation component for effect
+              // For now, simple particle fallback is fine, logic handled by specific effects or add new effect component
+              _playSkillEffect(skill.animationName!, target!.position);
+            }
             target!.takeDamage(damage);
           }
         }
@@ -508,5 +522,30 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         ),
       );
     }
+  }
+
+  void _playSkillEffect(String assetPath, Vector2 pos) {
+    // Placeholder: In a real implementation we would load the sprite sequence.
+    // Since we only have static images for effects (e.g. slash_effect.png), we can show it briefly.
+    final effectComponent = SpriteComponent()
+      ..position = pos
+      ..size = Vector2(50, 50)
+      ..anchor = Anchor.center
+      ..add(
+        OpacityEffect.fadeOut(EffectController(duration: 0.5, startDelay: 0.2)),
+      )
+      ..add(RemoveEffect(delay: 0.8));
+
+    gameRef.add(effectComponent);
+
+    // Async load fix:
+    gameRef
+        .loadSprite(assetPath)
+        .then((sprite) {
+          effectComponent.sprite = sprite;
+        })
+        .catchError((e) {
+          print("Failed to load skill effect: $assetPath");
+        });
   }
 }
