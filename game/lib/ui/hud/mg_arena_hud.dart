@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 import 'package:mg_common_game/core/ui/layout/mg_spacing.dart';
 import 'package:mg_common_game/core/ui/typography/mg_text_styles.dart';
-import 'package:mg_common_game/core/ui/widgets/buttons/mg_icon_button.dart';
-import 'package:mg_common_game/core/ui/widgets/progress/mg_linear_progress.dart';
-import 'package:mg_common_game/core/ui/widgets/indicators/mg_resource_bar.dart';
+import 'package:mg_common_game/core/ui/widgets/buttons/mg_button.dart';
+import 'package:mg_common_game/core/ui/widgets/progress/mg_progress.dart';
+import 'package:mg_common_game/core/ui/widgets/hud/resource_bar.dart';
 
 /// MG-0013 Arena Legend HUD
 /// 아레나 리그 게임용 HUD - 랭크, 티어, 골드, 배틀 정보 표시
@@ -44,17 +44,17 @@ class MGArenaHud extends StatelessWidget {
                 _buildRankBadge(),
                 const Spacer(),
                 // 자원 표시
-                MGResourceBar(
+                ResourceBar(
                   resources: [
                     ResourceItem(
                       icon: Icons.monetization_on,
                       value: gold,
-                      color: MGColors.resourceGold,
+                      color: MGColors.gold,
                     ),
                     ResourceItem(
                       icon: Icons.diamond,
                       value: gems,
-                      color: MGColors.resourceGem,
+                      color: MGColors.gem,
                     ),
                   ],
                 ),
