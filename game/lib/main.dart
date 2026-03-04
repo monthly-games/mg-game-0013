@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mg_common_game/systems/progression/achievement_manager.dart';
+import 'package:mg_common_game/systems/gacha/gacha_pool.dart';
+import 'package:mg_common_game/systems/gacha/gacha_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
@@ -24,6 +27,12 @@ import 'game/character_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await _initializeSystems();
+  // Gacha 시스템
+  GetIt.I.registerSingleton(GachaManager());
+  // Achievement 시스템
+  GetIt.I.registerSingleton(AchievementManager());
+  _registerAchievements();
+  _setupGacha();
   runApp(const ArenaLegendApp());
 }
 
@@ -538,4 +547,76 @@ class _UpgradeCard extends StatelessWidget {
       ),
     );
   }
+}
+
+
+void _setupGacha() {
+  final gacha = GetIt.I<GachaManager>();
+
+  gacha.registerPool(GachaPool(
+    id: 'standard_pool',
+    nameKr: '스탠다드 뽑기',
+    items: [
+      // N (50%)
+      ...List.generate(20, (i) => GachaItem(
+        id: 'n_item_$i',
+        nameKr: '일반 아이템 $i',
+        rarity: GachaRarity.normal,
+      )),
+
+      // R (35%)
+      ...List.generate(10, (i) => GachaItem(
+        id: 'r_item_$i',
+        nameKr: '레어 아이템 $i',
+        rarity: GachaRarity.rare,
+      )),
+
+      // SR (12%)
+      ...List.generate(5, (i) => GachaItem(
+        id: 'sr_item_$i',
+        nameKr: '슈퍼레어 아이템 $i',
+        rarity: GachaRarity.superRare,
+      )),
+
+      // SSR (2.7%)
+      GachaItem(
+        id: 'ssr_item_1',
+        nameKr: '울트라레어 아이템 1',
+        rarity: GachaRarity.ultraRare,
+      ),
+
+      // UR (0.3%)
+      GachaItem(
+        id: 'ur_item_1',
+        nameKr: '레전더리 아이템 1',
+        rarity: GachaRarity.legendary,
+      ),
+    ],
+  ));
+}
+
+
+void _registerAchievements() {
+  final achievement = GetIt.I<AchievementManager>();
+  
+  achievement.registerAchievement(Achievement(
+    id: 'gold_1000',
+    title: '골드 1000 달성',
+    description: '총 골드 1000을 모으세요',
+    iconAsset: 'assets/achievements/gold_1000.png',
+  ));
+  
+  achievement.registerAchievement(Achievement(
+    id: 'level_10',
+    title: '레벨 10 달성',
+    description: '레벨 10에 도달하세요',
+    iconAsset: 'assets/achievements/level_10.png',
+  ));
+  
+  achievement.registerAchievement(Achievement(
+    id: 'play_100',
+    title: '100판 플레이',
+    description: '게임을 100판 플레이하세요',
+    iconAsset: 'assets/achievements/play_100.png',
+  ));
 }
