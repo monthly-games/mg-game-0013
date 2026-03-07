@@ -37,7 +37,7 @@ class DamageTextComponent extends TextComponent {
     if (_lifeTime < 0.3) {
       textRenderer = TextPaint(
         style: (textRenderer as TextPaint).style.copyWith(
-          color: (textRenderer as TextPaint).style.color!.withOpacity(
+          color: (textRenderer as TextPaint).style.color!.withValues(alpha: 
             _lifeTime / 0.3,
           ),
         ),

@@ -173,7 +173,7 @@ class _SummonCard extends StatelessWidget {
         width: 150,
         height: 200,
         decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
+          color: color.withValues(alpha: 0.2),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: color, width: 2),
         ),

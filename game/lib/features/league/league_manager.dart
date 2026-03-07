@@ -60,6 +60,9 @@ class LeagueManager with ChangeNotifier {
         .toList();
   }
 
+  /// Alias for heroes (used as heroInventory in UI)
+  List<HeroData> get heroInventory => heroes;
+
   Future<void> initialize() async {
     await _storage.initialize();
 
@@ -142,7 +145,8 @@ class LeagueManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void addToTeam(String heroId) {
+  void addToTeam(dynamic heroIdOrData) {
+    final heroId = heroIdOrData is HeroData ? heroIdOrData.id : heroIdOrData as String;
     if (_myTeamIds.contains(heroId)) return;
     if (_myTeamIds.length >= 5) return;
 
@@ -151,7 +155,8 @@ class LeagueManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeFromTeam(String heroId) {
+  void removeFromTeam(dynamic heroIdOrData) {
+    final heroId = heroIdOrData is HeroData ? heroIdOrData.id : heroIdOrData as String;
     _myTeamIds.remove(heroId);
     _storage.saveMyTeam(_myTeamIds);
     notifyListeners();
@@ -202,5 +207,30 @@ class LeagueManager with ChangeNotifier {
     _myTeamIds = List.from(newTeamIds);
     await _storage.saveMyTeam(_myTeamIds);
     notifyListeners();
+  }
+
+  /// Check if a hero is in the current team
+  bool isInTeam(HeroData hero) {
+    return _myTeamIds.contains(hero.id);
+  }
+
+  /// Sell a hero from inventory
+  Future<void> sellHero(HeroData hero) async {
+    _heroes.removeWhere((h) => h.id == hero.id);
+    _myTeamIds.remove(hero.id);
+    
+    // Grant gold for selling (based on rarity)
+    final rarityMultiplier = {
+      HeroRarity.common: 10,
+      HeroRarity.uncommon: 25,
+      HeroRarity.rare: 50,
+      HeroRarity.epic: 100,
+      HeroRarity.legendary: 250,
+    };
+    _gold += rarityMultiplier[hero.rarity] ?? 10;
+    
+    await _storage.saveHeroes(_heroes);
+    await _storage.saveMyTeam(_myTeamIds);
+    await _saveCurrencies();
   }
 }

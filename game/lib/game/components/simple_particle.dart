@@ -40,7 +40,7 @@ class SimpleParticle extends PositionComponent {
     canvas.drawCircle(
       Offset(radius, radius),
       radius,
-      Paint()..color = color.withOpacity(opacity),
+      Paint()..color = color.withValues(alpha: opacity),
     );
   }
 }

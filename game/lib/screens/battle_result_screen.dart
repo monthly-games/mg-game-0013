@@ -116,7 +116,7 @@ class BattleResultScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isPromotion ? Colors.amber.withOpacity(0.2) : Colors.red.withOpacity(0.2),
+        color: isPromotion ? Colors.amber.withValues(alpha: 0.2) : Colors.red.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isPromotion ? Colors.amber : Colors.red,

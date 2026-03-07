@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
+import 'package:mg_common_game/core/ui/theme/app_colors.dart';
 import 'package:mg_common_game/core/ui/layout/mg_spacing.dart';
 import 'package:mg_common_game/core/ui/typography/mg_text_styles.dart';
 import 'package:mg_common_game/core/ui/widgets/buttons/mg_button.dart';
@@ -43,20 +44,18 @@ class MGArenaHud extends StatelessWidget {
                 // 랭크 정보
                 _buildRankBadge(),
                 const Spacer(),
-                // 자원 표시
+                // 자원 표시 - Gold
                 ResourceBar(
-                  resources: [
-                    ResourceItem(
-                      icon: Icons.monetization_on,
-                      value: gold,
-                      color: MGColors.gold,
-                    ),
-                    ResourceItem(
-                      icon: Icons.diamond,
-                      value: gems,
-                      color: MGColors.gem,
-                    ),
-                  ],
+                  icon: Icons.monetization_on,
+                  value: gold.toString(),
+                  color: MGColors.gold,
+                ),
+                const SizedBox(width: MGSpacing.xs),
+                // 자원 표시 - Gems
+                ResourceBar(
+                  icon: Icons.diamond,
+                  value: gems.toString(),
+                  color: MGColors.gem,
                 ),
                 const SizedBox(width: MGSpacing.sm),
                 // 설정 버튼
@@ -64,14 +63,14 @@ class MGArenaHud extends StatelessWidget {
                   MGIconButton(
                     icon: Icons.settings,
                     onPressed: onSettings!,
-                    size: MGIconButtonSize.small,
+                    buttonSize: MGIconButtonSize.small,
                   ),
                 // 일시정지 버튼
                 if (onPause != null)
                   MGIconButton(
                     icon: Icons.pause,
                     onPressed: onPause!,
-                    size: MGIconButtonSize.small,
+                    buttonSize: MGIconButtonSize.small,
                   ),
               ],
             ),
@@ -93,8 +92,8 @@ class MGArenaHud extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            _getTierColor().withOpacity(0.8),
-            _getTierColor().withOpacity(0.4),
+            _getTierColor().withValues(alpha: 0.8),
+            _getTierColor().withValues(alpha: 0.4),
           ],
         ),
         borderRadius: BorderRadius.circular(MGSpacing.sm),
@@ -144,7 +143,7 @@ class MGArenaHud extends StatelessWidget {
         vertical: MGSpacing.xs,
       ),
       decoration: BoxDecoration(
-        color: MGColors.surface.withOpacity(0.8),
+        color: MGColors.surface.withValues(alpha: 0.8),
         borderRadius: BorderRadius.circular(MGSpacing.xs),
       ),
       child: Row(
@@ -152,18 +151,18 @@ class MGArenaHud extends StatelessWidget {
           Text(
             'Rank Points',
             style: MGTextStyles.caption.copyWith(
-              color: MGColors.textSecondary,
+              color: AppColors.textMediumEmphasis,
             ),
           ),
           const SizedBox(width: MGSpacing.sm),
-          Expanded(
-            child: MGLinearProgress(
-              value: rankPoints / maxRankPoints,
-              height: 8,
-              backgroundColor: MGColors.surface,
-              progressColor: _getTierColor(),
-            ),
-          ),
+           Expanded(
+             child: MGLinearProgress(
+               value: rankPoints / maxRankPoints,
+               height: 8,
+               backgroundColor: MGColors.surface,
+               valueColor: _getTierColor(),
+             ),
+           ),
           const SizedBox(width: MGSpacing.sm),
           Text(
             '$rankPoints / $maxRankPoints',

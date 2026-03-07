@@ -24,10 +24,10 @@ class AudioManagerImpl extends AudioManager {
   }
 
   @override
-  void playSfx(String file, {double volume = 1.0, double pitch = 1.0}) {
+  Future<void> playSfx(String file, {double volume = 1.0, double pitch = 1.0}) async {
     if (!_isSfxOn) return;
     try {
-      FlameAudio.play(file, volume: volume);
+      await FlameAudio.play(file, volume: volume);
     } catch (e) {
       print("Error playing SFX $file: $e");
     }

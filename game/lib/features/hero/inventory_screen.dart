@@ -109,7 +109,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Colors.green.withOpacity(0.3)
+                          ? Colors.green.withValues(alpha: 0.3)
                           : Colors.grey[800],
                       border: Border.all(
                         color: isSelected ? Colors.green : Colors.transparent,

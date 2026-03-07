@@ -85,7 +85,7 @@ class VfxManager extends Component with HasGameRef {
       final angle = (i / count) * 2 * pi;
       return AcceleratedParticle(position: position.clone(), speed: Vector2(cos(angle), sin(angle)) * (speed * (0.5 + _random.nextDouble() * 0.5)), acceleration: Vector2(0, 200), child: ComputedParticle(renderer: (canvas, particle) {
         final opacity = (1.0 - particle.progress).clamp(0.0, 1.0);
-        canvas.drawCircle(Offset.zero, (isCritical ? 5 : 3) * (1.0 - particle.progress * 0.5), Paint()..color = color.withOpacity(opacity));
+        canvas.drawCircle(Offset.zero, (isCritical ? 5 : 3) * (1.0 - particle.progress * 0.5), Paint()..color = color.withValues(alpha: opacity));
       }));
     }));
   }
@@ -95,7 +95,7 @@ class VfxManager extends Component with HasGameRef {
       final angle = _random.nextDouble() * 2 * pi; final speed = radius * (0.4 + _random.nextDouble() * 0.6);
       return AcceleratedParticle(position: position.clone(), speed: Vector2(cos(angle), sin(angle)) * speed, acceleration: Vector2(0, 100), child: ComputedParticle(renderer: (canvas, particle) {
         final opacity = (1.0 - particle.progress).clamp(0.0, 1.0);
-        canvas.drawCircle(Offset.zero, 5 * (1.0 - particle.progress * 0.3), Paint()..color = color.withOpacity(opacity));
+        canvas.drawCircle(Offset.zero, 5 * (1.0 - particle.progress * 0.3), Paint()..color = color.withValues(alpha: opacity));
       }));
     }));
   }
@@ -104,7 +104,7 @@ class VfxManager extends Component with HasGameRef {
     return ParticleSystemComponent(particle: Particle.generate(count: 12, lifespan: 0.5, generator: (i) {
       final startAngle = (i / 12) * 2 * pi; final startPos = Vector2(cos(startAngle), sin(startAngle)) * 50;
       return MovingParticle(from: position + startPos, to: position.clone(), child: ComputedParticle(renderer: (canvas, particle) {
-        canvas.drawCircle(Offset.zero, 4, Paint()..color = color.withOpacity((1.0 - particle.progress * 0.5).clamp(0.0, 1.0)));
+        canvas.drawCircle(Offset.zero, 4, Paint()..color = color.withValues(alpha: (1.0 - particle.progress * 0.5).clamp(0.0, 1.0)));
       }));
     }));
   }
@@ -119,7 +119,7 @@ class VfxManager extends Component with HasGameRef {
         } else {
           path.lineTo(cos(a) * size, sin(a) * size);
         } } path.close();
-        canvas.drawPath(path, Paint()..color = color.withOpacity(opacity));
+        canvas.drawPath(path, Paint()..color = color.withValues(alpha: opacity));
       }));
     }));
   }
@@ -128,7 +128,7 @@ class VfxManager extends Component with HasGameRef {
     return ParticleSystemComponent(particle: Particle.generate(count: count, lifespan: 0.8, generator: (i) {
       return AcceleratedParticle(position: position.clone() + Vector2((_random.nextDouble() - 0.5) * 25, 0), speed: Vector2((_random.nextDouble() - 0.5) * 15, -30 - _random.nextDouble() * 20), acceleration: Vector2(0, -10), child: ComputedParticle(renderer: (canvas, particle) {
         final progress = particle.progress; final opacity = (0.5 - progress * 0.5).clamp(0.0, 1.0);
-        canvas.drawCircle(Offset.zero, 6 + progress * 10, Paint()..color = Colors.grey.withOpacity(opacity));
+        canvas.drawCircle(Offset.zero, 6 + progress * 10, Paint()..color = Colors.grey.withValues(alpha: opacity));
       }));
     }));
   }
@@ -137,7 +137,7 @@ class VfxManager extends Component with HasGameRef {
     return ParticleSystemComponent(particle: Particle.generate(count: 1, lifespan: 0.6, generator: (i) {
       return ComputedParticle(renderer: (canvas, particle) {
         final progress = particle.progress; final opacity = (1.0 - progress).clamp(0.0, 1.0);
-        canvas.drawCircle(Offset(position.x, position.y), 15 + progress * 35, Paint()..color = color.withOpacity(opacity * 0.4)..style = PaintingStyle.stroke..strokeWidth = 2);
+        canvas.drawCircle(Offset(position.x, position.y), 15 + progress * 35, Paint()..color = color.withValues(alpha: opacity * 0.4)..style = PaintingStyle.stroke..strokeWidth = 2);
       });
     }));
   }
@@ -148,7 +148,7 @@ class VfxManager extends Component with HasGameRef {
       return AcceleratedParticle(position: position.clone(), speed: Vector2(cos(angle), sin(angle)) * speed, acceleration: Vector2(0, 350), child: ComputedParticle(renderer: (canvas, particle) {
         final opacity = (1.0 - particle.progress * 0.2).clamp(0.0, 1.0);
         canvas.save(); canvas.rotate(particle.progress * 3 * pi);
-        canvas.drawOval(const Rect.fromLTWH(-3, -2, 6, 4), Paint()..color = Colors.amber.withOpacity(opacity));
+        canvas.drawOval(const Rect.fromLTWH(-3, -2, 6, 4), Paint()..color = Colors.amber.withValues(alpha: opacity));
         canvas.restore();
       }));
     }));
