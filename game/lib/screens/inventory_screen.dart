@@ -4,6 +4,7 @@ import 'package:mg_common_game/core/ui/theme/app_colors.dart';
 import 'package:mg_common_game/core/ui/theme/app_text_styles.dart';
 import '../features/league/league_manager.dart';
 import '../features/hero/hero_data.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class InventoryScreen extends StatelessWidget {
   const InventoryScreen({super.key});
@@ -224,7 +225,7 @@ class InventoryScreen extends StatelessWidget {
                     child: Text(
                       'IN TEAM',
                       style: AppTextStyles.caption.copyWith(
-                        color: Colors.white,
+                        color: MGColors.textHighEmphasis,
                         fontSize: 8,
                         fontWeight: FontWeight.bold,
                       ),
@@ -326,10 +327,10 @@ class InventoryScreen extends StatelessWidget {
               // Stats
               const Text('Combat Stats', style: AppTextStyles.subHeader),
               const SizedBox(height: 8),
-              _buildStatBar('HP', hero.maxHp, 250, Colors.green),
-              _buildStatBar('ATK', hero.attack, 50, Colors.red),
-              _buildStatBar('DEF', hero.defense, 30, Colors.blue),
-              _buildStatBar('SPD', hero.speed, 100, Colors.orange),
+              _buildStatBar('HP', hero.maxHp, 250, MGColors.success),
+              _buildStatBar('ATK', hero.attack, 50, MGColors.error),
+              _buildStatBar('DEF', hero.defense, 30, MGColors.info),
+              _buildStatBar('SPD', hero.speed, 100, MGColors.warning),
               _buildDetailRow(
                 'Crit Rate',
                 '${(hero.critRate * 100).toStringAsFixed(1)}%',
@@ -377,7 +378,7 @@ class InventoryScreen extends StatelessWidget {
             },
             child: Text(
               'SELL (${(hero.cost * 0.5).toInt()} 💰)',
-              style: const TextStyle(color: Colors.red),
+              style: const TextStyle(color: MGColors.error),
             ),
           ),
 
@@ -397,7 +398,7 @@ class InventoryScreen extends StatelessWidget {
             child: Text(
               isInTeam ? 'REMOVE FROM TEAM' : 'ADD TO TEAM',
               style: TextStyle(
-                color: isInTeam ? Colors.orange : AppColors.primary,
+                color: isInTeam ? MGColors.warning : AppColors.primary,
               ),
             ),
           ),
@@ -434,7 +435,7 @@ class InventoryScreen extends StatelessWidget {
               lm.sellHero(hero);
               Navigator.pop(context);
             },
-            child: const Text('SELL', style: TextStyle(color: Colors.red)),
+            child: const Text('SELL', style: TextStyle(color: MGColors.error)),
           ),
         ],
       ),
@@ -534,11 +535,11 @@ class InventoryScreen extends StatelessWidget {
   Color _getRarityColor(HeroRarity rarity) {
     switch (rarity) {
       case HeroRarity.common:
-        return Colors.grey;
+        return MGColors.common;
       case HeroRarity.uncommon:
-        return Colors.green;
+        return MGColors.success;
       case HeroRarity.rare:
-        return Colors.blue;
+        return MGColors.info;
       case HeroRarity.epic:
         return Colors.purple;
       case HeroRarity.legendary:

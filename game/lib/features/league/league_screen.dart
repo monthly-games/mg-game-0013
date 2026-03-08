@@ -8,6 +8,7 @@ import '../../features/recruit/recruit_screen.dart';
 import '../../features/hero/inventory_screen.dart';
 import 'league_manager.dart';
 import '../battle/battle_scene.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class LeagueScreen extends StatefulWidget {
   const LeagueScreen({super.key});
@@ -136,7 +137,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: leagueManager.tickets > 0
                         ? Colors.redAccent
-                        : Colors.grey,
+                        : MGColors.common,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 50,
                       vertical: 20,
@@ -147,7 +148,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: MGColors.textHighEmphasis,
                     ),
                   ),
                 ),

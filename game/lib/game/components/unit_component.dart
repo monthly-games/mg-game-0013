@@ -10,6 +10,7 @@ import 'simple_particle.dart';
 import '../arena_game.dart';
 import '../../features/hero/hero_data.dart';
 import '../../features/skill/skill_data.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 enum UnitTeam { ally, enemy }
 
@@ -380,7 +381,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       DamageTextComponent(damage: 0, position: position + Vector2(0, -20))
         ..text = "+${amount.toInt()}"
         ..textRenderer = TextPaint(
-          style: const TextStyle(color: Colors.green, fontSize: 12),
+          style: const TextStyle(color: MGColors.success, fontSize: 12),
         ),
     );
   }
@@ -457,7 +458,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       _sprite!.render(canvas, size: size);
     } else {
       // Fallback rendering
-      final color = team == UnitTeam.ally ? Colors.blue : Colors.red;
+      final color = team == UnitTeam.ally ? MGColors.info : MGColors.error;
       final paint = Paint()..color = color;
       canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
     }
@@ -470,7 +471,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     );
     canvas.drawRect(
       Rect.fromLTWH(0, -10, width * hpRatio.clamp(0, 1), 5),
-      Paint()..color = Colors.green,
+      Paint()..color = MGColors.success,
     );
 
     // Skill Cooldown Bar
@@ -503,7 +504,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
             (rand.nextDouble() - 0.5) * 200,
             (rand.nextDouble() - 0.5) * 200,
           ),
-          color: team == UnitTeam.ally ? Colors.blue : Colors.red,
+          color: team == UnitTeam.ally ? MGColors.info : MGColors.error,
           lifeTime: 0.5 + rand.nextDouble() * 0.5,
         ),
       );

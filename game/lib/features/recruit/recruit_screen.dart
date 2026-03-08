@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import '../../features/league/league_manager.dart';
 import '../../features/hero/hero_data.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class RecruitScreen extends StatefulWidget {
   const RecruitScreen({super.key});
@@ -102,7 +103,7 @@ class _RecruitScreenState extends State<RecruitScreen> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: MGColors.textHighEmphasis,
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -145,7 +146,7 @@ class _CurrencyChip extends StatelessWidget {
             style: TextStyle(color: color, fontWeight: FontWeight.bold),
           ),
           const SizedBox(width: 8),
-          Text("$value", style: const TextStyle(color: Colors.white)),
+          Text("$value", style: const TextStyle(color: MGColors.textHighEmphasis)),
         ],
       ),
     );
@@ -209,7 +210,7 @@ class _HeroCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[800],
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white),
+        border: Border.all(color: MGColors.textHighEmphasis),
       ),
       child: Column(
         children: [
@@ -218,7 +219,7 @@ class _HeroCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: MGColors.textHighEmphasis,
             ),
           ),
           Text(

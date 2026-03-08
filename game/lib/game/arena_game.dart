@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import 'components/unit_component.dart';
 import '../features/hero/hero_data.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class ArenaGame extends FlameGame {
   final List<HeroData> allies;

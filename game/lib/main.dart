@@ -19,6 +19,7 @@ import 'screens/gacha_screen.dart';
 import 'screens/daily_quest_screen.dart';
 import 'screens/achievement_screen.dart';
 import 'screens/battlepass_screen.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 // ============================================================
 // Arena Legend — MG-0013
@@ -299,7 +300,7 @@ class _ArenaHomeScreenState extends State<ArenaHomeScreen> {
         currentIndex: _selectedTab,
         onTap: (index) => setState(() => _selectedTab = index),
         backgroundColor: const Color(0xFF16213E),
-        selectedItemColor: const Color(0xFFFFD700),
+        selectedItemColor: MGColors.gold,
         unselectedItemColor: Colors.white54,
         items: const [
           BottomNavigationBarItem(
@@ -423,12 +424,12 @@ class _CurrencyHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.monetization_on, color: Color(0xFFFFD700)),
+          const Icon(Icons.monetization_on, color: MGColors.gold),
           const SizedBox(width: 8),
           Text(
             '$gold Gold',
             style: const TextStyle(
-              color: Color(0xFFFFD700),
+              color: MGColors.gold,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -448,12 +449,12 @@ class _CategoryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: const Color(0xFFFFD700), size: 20),
+        Icon(icon, color: MGColors.gold, size: 20),
         const SizedBox(width: 8),
         Text(
           label,
           style: const TextStyle(
-            color: Colors.white,
+            color: MGColors.textHighEmphasis,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
@@ -493,7 +494,7 @@ class _UpgradeCard extends StatelessWidget {
                   Text(
                     upgrade.name,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: MGColors.textHighEmphasis,
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
@@ -513,7 +514,7 @@ class _UpgradeCard extends StatelessWidget {
                       Text(
                         'Lv.${upgrade.currentLevel}/${upgrade.maxLevel}',
                         style: const TextStyle(
-                          color: Color(0xFFFFD700),
+                          color: MGColors.gold,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
@@ -526,7 +527,7 @@ class _UpgradeCard extends StatelessWidget {
                             value: upgrade.currentLevel / upgrade.maxLevel,
                             backgroundColor: Colors.white12,
                             valueColor: const AlwaysStoppedAnimation<Color>(
-                              Color(0xFFFFD700),
+                              MGColors.gold,
                             ),
                             minHeight: 6,
                           ),
@@ -545,7 +546,7 @@ class _UpgradeCard extends StatelessWidget {
                 onPressed: (canAfford && !isMaxed) ? onPurchase : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: canAfford && !isMaxed
-                      ? const Color(0xFFFFD700)
+                      ? MGColors.gold
                       : Colors.grey[700],
                   foregroundColor: Colors.black,
                   padding: const EdgeInsets.symmetric(vertical: 8),

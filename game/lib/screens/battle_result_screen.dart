@@ -3,6 +3,7 @@ import 'package:mg_common_game/core/ui/theme/app_colors.dart';
 import 'package:mg_common_game/core/ui/theme/app_text_styles.dart';
 import '../features/league/battle_result_data.dart';
 import '../features/league/league_data.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class BattleResultScreen extends StatelessWidget {
   final BattleResultData result;
@@ -27,7 +28,7 @@ class BattleResultScreen extends StatelessWidget {
               color: AppColors.panel,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: result.isVictory ? Colors.amber : Colors.red,
+                color: result.isVictory ? Colors.amber : MGColors.error,
                 width: 3,
               ),
             ),
@@ -92,14 +93,14 @@ class BattleResultScreen extends StatelessWidget {
         Icon(
           result.isVictory ? Icons.emoji_events : Icons.cancel,
           size: 80,
-          color: result.isVictory ? Colors.amber : Colors.red,
+          color: result.isVictory ? Colors.amber : MGColors.error,
         ),
         const SizedBox(height: 16),
         // Result Message
         Text(
           result.resultMessage,
           style: AppTextStyles.header1.copyWith(
-            color: result.isVictory ? Colors.amber : Colors.red,
+            color: result.isVictory ? Colors.amber : MGColors.error,
             fontWeight: FontWeight.bold,
             fontSize: 28,
           ),
@@ -116,10 +117,10 @@ class BattleResultScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isPromotion ? Colors.amber.withValues(alpha: 0.2) : Colors.red.withValues(alpha: 0.2),
+        color: isPromotion ? Colors.amber.withValues(alpha: 0.2) : MGColors.error.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: isPromotion ? Colors.amber : Colors.red,
+          color: isPromotion ? Colors.amber : MGColors.error,
           width: 2,
         ),
       ),
@@ -127,14 +128,14 @@ class BattleResultScreen extends StatelessWidget {
         children: [
           Icon(
             isPromotion ? Icons.trending_up : Icons.trending_down,
-            color: isPromotion ? Colors.amber : Colors.red,
+            color: isPromotion ? Colors.amber : MGColors.error,
             size: 40,
           ),
           const SizedBox(height: 8),
           Text(
             isPromotion ? 'PROMOTED!' : 'RELEGATED',
             style: AppTextStyles.subHeader.copyWith(
-              color: isPromotion ? Colors.amber : Colors.red,
+              color: isPromotion ? Colors.amber : MGColors.error,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -183,7 +184,7 @@ class BattleResultScreen extends StatelessWidget {
                 icon: '⭐',
                 label: 'LP',
                 value: result.pointsDisplay,
-                color: result.pointsChanged >= 0 ? Colors.green : Colors.red,
+                color: result.pointsChanged >= 0 ? MGColors.success : MGColors.error,
               ),
             ],
           ),
@@ -247,12 +248,12 @@ class BattleResultScreen extends StatelessWidget {
               _buildStatItem(
                 label: 'Allies Remaining',
                 value: result.allyUnitsRemaining.toString(),
-                color: Colors.blue,
+                color: MGColors.info,
               ),
               _buildStatItem(
                 label: 'Enemies Killed',
                 value: result.enemyUnitsKilled.toString(),
-                color: Colors.red,
+                color: MGColors.error,
               ),
             ],
           ),
@@ -300,12 +301,12 @@ class BattleResultScreen extends StatelessWidget {
           _buildRecordItem(
             label: 'Total Wins',
             value: result.totalWins.toString(),
-            color: Colors.green,
+            color: MGColors.success,
           ),
           _buildRecordItem(
             label: 'Total Losses',
             value: result.totalLosses.toString(),
-            color: Colors.red,
+            color: MGColors.error,
           ),
           _buildRecordItem(
             label: 'Win Rate',

@@ -107,7 +107,7 @@ class MGArenaHud extends StatelessWidget {
         children: [
           Icon(
             _getTierIcon(),
-            color: Colors.white,
+            color: MGColors.textHighEmphasis,
             size: 24,
           ),
           const SizedBox(width: MGSpacing.xs),
@@ -118,7 +118,7 @@ class MGArenaHud extends StatelessWidget {
               Text(
                 rankTier,
                 style: MGTextStyles.buttonMedium.copyWith(
-                  color: Colors.white,
+                  color: MGColors.textHighEmphasis,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -167,7 +167,7 @@ class MGArenaHud extends StatelessWidget {
           Text(
             '$rankPoints / $maxRankPoints',
             style: MGTextStyles.caption.copyWith(
-              color: Colors.white,
+              color: MGColors.textHighEmphasis,
             ),
           ),
         ],
@@ -182,7 +182,7 @@ class MGArenaHud extends StatelessWidget {
       case 'silver':
         return const Color(0xFFC0C0C0);
       case 'gold':
-        return const Color(0xFFFFD700);
+        return MGColors.gold;
       case 'platinum':
         return const Color(0xFFE5E4E2);
       case 'diamond':

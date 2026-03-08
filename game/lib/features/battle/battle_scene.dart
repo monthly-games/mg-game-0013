@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import '../../features/hero/hero_data.dart';
 import '../../game/components/unit_component.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class BattleScene extends FlameGame {
   final Function(bool isWin) onBattleEnd;
@@ -126,7 +127,7 @@ class BattleScene extends FlameGame {
                 isWin ? "VICTORY" : "DEFEAT",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: MGColors.textHighEmphasis,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),

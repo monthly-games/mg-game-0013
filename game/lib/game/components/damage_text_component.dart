@@ -1,5 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class DamageTextComponent extends TextComponent {
   final double damage;
@@ -17,7 +18,7 @@ class DamageTextComponent extends TextComponent {
          anchor: Anchor.center,
          textRenderer: TextPaint(
            style: TextStyle(
-             color: isCrit ? Colors.red : Colors.white,
+             color: isCrit ? MGColors.error : MGColors.textHighEmphasis,
              fontSize: isCrit ? 24 : 16,
              fontWeight: FontWeight.bold,
              shadows: const [

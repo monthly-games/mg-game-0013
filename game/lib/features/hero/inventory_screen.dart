@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../features/league/league_manager.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -109,10 +110,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: isSelected
-                          ? Colors.green.withValues(alpha: 0.3)
+                          ? MGColors.success.withValues(alpha: 0.3)
                           : Colors.grey[800],
                       border: Border.all(
-                        color: isSelected ? Colors.green : Colors.transparent,
+                        color: isSelected ? MGColors.success : Colors.transparent,
                         width: 3,
                       ),
                       borderRadius: BorderRadius.circular(8),
@@ -124,13 +125,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           hero.name,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: MGColors.textHighEmphasis,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         Text(
                           hero.job.name,
-                          style: const TextStyle(color: Colors.grey),
+                          style: const TextStyle(color: MGColors.common),
                         ),
                         Text(
                           "Lv.${hero.level}",
