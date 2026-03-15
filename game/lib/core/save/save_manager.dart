@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/hero/hero_data.dart';
 import '../../features/league/league_data.dart';
+import 'package:flutter/foundation.dart';
 
 /// Save manager using SharedPreferences
 class SaveManager {
@@ -26,7 +27,7 @@ class SaveManager {
       final json = jsonDecode(jsonStr) as Map<String, dynamic>;
       return SaveData.fromJson(json);
     } catch (e) {
-      print('Error loading save data: $e');
+      debugPrint('Error loading save data: $e');
       return null;
     }
   }

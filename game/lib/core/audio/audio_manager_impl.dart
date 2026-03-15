@@ -1,12 +1,14 @@
 import 'package:flame_audio/flame_audio.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
+import 'package:mg_common_game/core/assets/asset_types.dart';
+import 'package:flutter/foundation.dart';
 
 class AudioManagerImpl extends AudioManager {
   final bool _isMusicOn = true;
   final bool _isSfxOn = true;
 
   @override
-  Future<void> initialize() async {
+  Future<void> initialize({List<AudioAssetMeta>? criticalSounds}) async {
     // Preload common SFX if they existed
     // await FlameAudio.audioCache.loadAll(['hit.wav', 'crit.wav']);
   }
@@ -19,7 +21,7 @@ class AudioManagerImpl extends AudioManager {
         FlameAudio.bgm.play(file, volume: volume);
       }
     } catch (e) {
-      print("Error playing BGM $file: $e");
+      debugPrint("Error playing BGM $file: $e");
     }
   }
 
@@ -29,7 +31,7 @@ class AudioManagerImpl extends AudioManager {
     try {
       await FlameAudio.play(file, volume: volume);
     } catch (e) {
-      print("Error playing SFX $file: $e");
+      debugPrint("Error playing SFX $file: $e");
     }
   }
 

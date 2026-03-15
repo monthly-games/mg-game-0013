@@ -6,40 +6,40 @@ import 'package:flutter/material.dart';
 
 /// VFX Manager for Arena Legends: Mercenary League (MG-0013)
 /// Auto-Battler + League PVP 게임 전용 이펙트 관리자
-class VfxManager extends Component with HasGameRef {
+class VfxManager extends Component with HasGameReference {
   VfxManager();
   final Random _random = Random();
 
   // Battle Effects
   void showAttackHit(Vector2 position, {Color color = Colors.white, bool isCritical = false}) {
-    gameRef.add(_createHitEffect(position: position, color: color, isCritical: isCritical));
-    if (isCritical) gameRef.add(_createSparkleEffect(position: position, color: Colors.yellow, count: 12));
+    game.add(_createHitEffect(position: position, color: color, isCritical: isCritical));
+    if (isCritical) game.add(_createSparkleEffect(position: position, color: Colors.yellow, count: 12));
   }
 
   void showDamageNumber(Vector2 position, int damage, {bool isCritical = false}) {
-    gameRef.add(_DamageNumber(position: position, damage: damage, isCritical: isCritical));
+    game.add(_DamageNumber(position: position, damage: damage, isCritical: isCritical));
   }
 
   void showSkillActivation(Vector2 position, Color skillColor) {
-    gameRef.add(_createConvergeEffect(position: position, color: skillColor));
-    gameRef.add(_createGroundCircle(position: position, color: skillColor));
+    game.add(_createConvergeEffect(position: position, color: skillColor));
+    game.add(_createGroundCircle(position: position, color: skillColor));
   }
 
   void showUnitDeath(Vector2 position) {
-    gameRef.add(_createExplosionEffect(position: position, color: Colors.red, count: 20, radius: 50));
-    gameRef.add(_createSmokeEffect(position: position, count: 6));
+    game.add(_createExplosionEffect(position: position, color: Colors.red, count: 20, radius: 50));
+    game.add(_createSmokeEffect(position: position, count: 6));
   }
 
   // League/Ranking Effects
   void showLeagueRankUp(Vector2 position, String newRank) {
-    gameRef.add(_createExplosionEffect(position: position, color: Colors.amber, count: 40, radius: 80));
+    game.add(_createExplosionEffect(position: position, color: Colors.amber, count: 40, radius: 80));
     for (int i = 0; i < 5; i++) {
       Future.delayed(Duration(milliseconds: i * 100), () {
         if (!isMounted) return;
-        gameRef.add(_createSparkleEffect(position: position + Vector2((_random.nextDouble() - 0.5) * 80, (_random.nextDouble() - 0.5) * 60), color: Colors.yellow, count: 8));
+        game.add(_createSparkleEffect(position: position + Vector2((_random.nextDouble() - 0.5) * 80, (_random.nextDouble() - 0.5) * 60), color: Colors.yellow, count: 8));
       });
     }
-    gameRef.add(_RankUpText(position: position, rank: newRank));
+    game.add(_RankUpText(position: position, rank: newRank));
     _triggerScreenShake(intensity: 5, duration: 0.4);
   }
 
@@ -47,34 +47,34 @@ class VfxManager extends Component with HasGameRef {
     for (int i = 0; i < 8; i++) {
       Future.delayed(Duration(milliseconds: i * 80), () {
         if (!isMounted) return;
-        gameRef.add(_createCoinEffect(position: position + Vector2((_random.nextDouble() - 0.5) * 100, -20), count: 5));
+        game.add(_createCoinEffect(position: position + Vector2((_random.nextDouble() - 0.5) * 100, -20), count: 5));
       });
     }
-    gameRef.add(_createSparkleEffect(position: position, color: Colors.amber, count: 25));
+    game.add(_createSparkleEffect(position: position, color: Colors.amber, count: 25));
   }
 
   void showBattleResult(Vector2 position, {required bool isVictory}) {
     if (isVictory) {
-      gameRef.add(_createExplosionEffect(position: position, color: Colors.amber, count: 35, radius: 70));
-      gameRef.add(_VictoryText(position: position));
+      game.add(_createExplosionEffect(position: position, color: Colors.amber, count: 35, radius: 70));
+      game.add(_VictoryText(position: position));
     } else {
-      gameRef.add(_createSmokeEffect(position: position, count: 15));
-      gameRef.add(_DefeatText(position: position));
+      game.add(_createSmokeEffect(position: position, count: 15));
+      game.add(_DefeatText(position: position));
     }
   }
 
   void showTeamFormation(Vector2 position) {
-    gameRef.add(_createSparkleEffect(position: position, color: Colors.cyan, count: 15));
-    gameRef.add(_createGroundCircle(position: position, color: Colors.blue));
+    game.add(_createSparkleEffect(position: position, color: Colors.cyan, count: 15));
+    game.add(_createGroundCircle(position: position, color: Colors.blue));
   }
 
   void showNumberPopup(Vector2 position, String text, {Color color = Colors.white}) {
-    gameRef.add(_NumberPopup(position: position, text: text, color: color));
+    game.add(_NumberPopup(position: position, text: text, color: color));
   }
 
   void _triggerScreenShake({double intensity = 5, double duration = 0.3}) {
-    if (gameRef.camera.viewfinder.children.isNotEmpty) {
-      gameRef.camera.viewfinder.add(MoveByEffect(Vector2(intensity, 0), EffectController(duration: duration / 10, repeatCount: (duration * 10).toInt(), alternate: true)));
+    if (game.camera.viewfinder.children.isNotEmpty) {
+      game.camera.viewfinder.add(MoveByEffect(Vector2(intensity, 0), EffectController(duration: duration / 10, repeatCount: (duration * 10).toInt(), alternate: true)));
     }
   }
 

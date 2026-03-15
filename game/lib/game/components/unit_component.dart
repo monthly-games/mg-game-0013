@@ -16,7 +16,7 @@ enum UnitTeam { ally, enemy }
 
 enum UnitState { idle, moving, attacking, casting, dead }
 
-class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
+class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
   final UnitTeam team;
   final HeroData data;
 
@@ -113,7 +113,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     target = null;
     double minDistance = double.infinity;
 
-    gameRef.children.query<UnitComponent>().forEach((other) {
+    game.children.query<UnitComponent>().forEach((other) {
       if (other.team != team && other.hp > 0) {
         final dist = position.distanceTo(other.position);
         if (dist < minDistance) {
@@ -170,7 +170,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     if (data.job == HeroJob.archer || data.job == HeroJob.mage) {
       // Ranged Attack
       _playSfx('shoot.wav');
-      gameRef.add(
+      game.add(
         ArenaProjectile(
           position: position.clone(),
           target: target!,
@@ -196,7 +196,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     _skillCooldownTimer = skill.cooldown;
 
     // Show skill name
-    gameRef.add(
+    game.add(
       DamageTextComponent(damage: 0, position: position + Vector2(0, -30))
         ..textRenderer = TextPaint(
           style: const TextStyle(
@@ -242,7 +242,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         if (target != null) {
           if (data.job == HeroJob.archer || data.job == HeroJob.mage) {
             // Projectile based skill
-            gameRef.add(
+            game.add(
               ArenaProjectile(
                 position: position.clone(),
                 target: target!,
@@ -263,7 +263,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         }
         break;
       case SkillTarget.allEnemies:
-        gameRef.children.query<UnitComponent>().forEach((other) {
+        game.children.query<UnitComponent>().forEach((other) {
           if (other.team != team) {
             other.takeDamage(damage);
           }
@@ -293,7 +293,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         }
         break;
       case SkillTarget.allAllies:
-        gameRef.children.query<UnitComponent>().forEach((other) {
+        game.children.query<UnitComponent>().forEach((other) {
           if (other.team == team) {
             other.hp = (other.hp + healAmount).clamp(0, other.maxHp);
             other._spawnHealParticles();
@@ -314,7 +314,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         _buffs[skill.id] = duration;
         break;
       case SkillTarget.allAllies:
-        gameRef.children.query<UnitComponent>().forEach((other) {
+        game.children.query<UnitComponent>().forEach((other) {
           if (other.team == team) {
             other._buffs[skill.id] = duration;
           }
@@ -337,7 +337,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
         }
         break;
       case SkillTarget.allEnemies:
-        gameRef.children.query<UnitComponent>().forEach((other) {
+        game.children.query<UnitComponent>().forEach((other) {
           if (other.team != team) {
             other._debuffs[skill.id] = duration;
           }
@@ -352,7 +352,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     final damage = attack * skill.value;
     final radius = skill.aoeRadius ?? 150.0;
 
-    gameRef.children.query<UnitComponent>().forEach((other) {
+    game.children.query<UnitComponent>().forEach((other) {
       if (other.team != team && position.distanceTo(other.position) < radius) {
         other.takeDamage(damage);
       }
@@ -363,7 +363,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     UnitComponent? lowestAlly;
     double minHpRatio = 1.0;
 
-    gameRef.children.query<UnitComponent>().forEach((other) {
+    game.children.query<UnitComponent>().forEach((other) {
       if (other.team == team && other.hp < other.maxHp) {
         final ratio = other.hp / other.maxHp;
         if (ratio < minHpRatio) {
@@ -377,7 +377,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
   }
 
   void _showHealText(double amount) {
-    gameRef.add(
+    game.add(
       DamageTextComponent(damage: 0, position: position + Vector2(0, -20))
         ..text = "+${amount.toInt()}"
         ..textRenderer = TextPaint(
@@ -423,7 +423,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     hp -= finalDamage;
 
     // Show Damage Text
-    gameRef.add(
+    game.add(
       DamageTextComponent(
         damage: finalDamage.toDouble(),
         position: position.clone() + Vector2(0, -20),
@@ -445,9 +445,9 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
     await super.onLoad();
     // Load sprite based on job
     try {
-      _sprite = await gameRef.loadSprite('heroes/hero_${data.job.name}.png');
+      _sprite = await game.loadSprite('heroes/hero_${data.job.name}.png');
     } catch (e) {
-      print('Failed to load sprite for ${data.job.name}: $e');
+      debugPrint('Failed to load sprite for ${data.job.name}: $e');
     }
   }
 
@@ -497,7 +497,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
   void _spawnDeathParticles() {
     final rand = Random();
     for (int i = 0; i < 15; i++) {
-      gameRef.add(
+      game.add(
         SimpleParticle(
           position: position.clone(),
           velocity: Vector2(
@@ -514,7 +514,7 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
   void _spawnHealParticles() {
     final rand = Random();
     for (int i = 0; i < 8; i++) {
-      gameRef.add(
+      game.add(
         SimpleParticle(
           position:
               position.clone() + Vector2((rand.nextDouble() - 0.5) * 20, 0),
@@ -537,16 +537,16 @@ class UnitComponent extends PositionComponent with HasGameRef<ArenaGame> {
       )
       ..add(RemoveEffect(delay: 0.8));
 
-    gameRef.add(effectComponent);
+    game.add(effectComponent);
 
     // Async load fix:
-    gameRef
+    game
         .loadSprite(assetPath)
         .then((sprite) {
           effectComponent.sprite = sprite;
         })
         .catchError((e) {
-          print("Failed to load skill effect: $assetPath");
+          debugPrint("Failed to load skill effect: $assetPath");
         });
   }
 }

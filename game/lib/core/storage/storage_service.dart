@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../../features/hero/hero_data.dart';
+import 'package:flutter/foundation.dart';
 
 class StorageService {
   static const String _boxName = 'arena_legends_data';
@@ -10,7 +11,6 @@ class StorageService {
   static const String _kCrystals = 'crystals';
   static const String _kTickets = 'tickets';
   static const String _kLp = 'lp';
-  static const String _kDivision = 'division';
   static const String _kHeroes = 'heroes'; // List<Map>
   static const String _kMyTeam = 'my_team'; // List<String> IDs
 
@@ -52,7 +52,7 @@ class StorageService {
       final List<dynamic> list = jsonDecode(rawData);
       return list.map((e) => HeroData.fromJson(e)).toList();
     } catch (e) {
-      print('Error loading heroes: $e');
+      debugPrint('Error loading heroes: $e');
       return [];
     }
   }

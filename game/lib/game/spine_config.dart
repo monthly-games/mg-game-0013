@@ -14,7 +14,7 @@ const kArenaFighterMeta = SpineAssetMeta(
   atlasPath:
       'assets/spine/characters/arena_fighter/arena_fighter.atlas',
   skeletonPath:
-      'assets/spine/characters/arena_fighter/arena_fighter.skel',
+      'assets/spine/characters/arena_fighter/arena_fighter.json',
   animations: ['idle', 'walk', 'attack', 'hit'],
   defaultAnimation: 'idle',
   defaultMix: 0.2,
@@ -28,7 +28,7 @@ const kArenaRangerMeta = SpineAssetMeta(
   atlasPath:
       'assets/spine/characters/arena_ranger/arena_ranger.atlas',
   skeletonPath:
-      'assets/spine/characters/arena_ranger/arena_ranger.skel',
+      'assets/spine/characters/arena_ranger/arena_ranger.json',
   animations: ['idle', 'walk', 'attack', 'hit'],
   defaultAnimation: 'idle',
   defaultMix: 0.2,
@@ -41,7 +41,7 @@ const kArenaMageMeta = SpineAssetMeta(
   path: 'spine/characters/arena_mage',
   atlasPath: 'assets/spine/characters/arena_mage/arena_mage.atlas',
   skeletonPath:
-      'assets/spine/characters/arena_mage/arena_mage.skel',
+      'assets/spine/characters/arena_mage/arena_mage.json',
   animations: ['idle', 'walk', 'attack', 'hit'],
   defaultAnimation: 'idle',
   defaultMix: 0.2,
