@@ -14,24 +14,24 @@ class AudioManagerImpl extends AudioManager {
   }
 
   @override
-  void playBgm(String file, {double volume = 0.5}) {
+  void playBgm(String fileName, {double volume = 0.5}) {
     if (!_isMusicOn) return;
     try {
       if (!FlameAudio.bgm.isPlaying) {
-        FlameAudio.bgm.play(file, volume: volume);
+        FlameAudio.bgm.play(fileName, volume: volume);
       }
     } catch (e) {
-      debugPrint("Error playing BGM $file: $e");
+      debugPrint("Error playing BGM $fileName: $e");
     }
   }
 
   @override
-  Future<void> playSfx(String file, {double volume = 1.0, double pitch = 1.0}) async {
+  Future<void> playSfx(String fileName, {double volume = 1.0, double pitch = 1.0}) async {
     if (!_isSfxOn) return;
     try {
-      await FlameAudio.play(file, volume: volume);
+      await FlameAudio.play(fileName, volume: volume);
     } catch (e) {
-      debugPrint("Error playing SFX $file: $e");
+      debugPrint("Error playing SFX $fileName: $e");
     }
   }
 

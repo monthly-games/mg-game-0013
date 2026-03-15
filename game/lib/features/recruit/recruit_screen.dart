@@ -18,17 +18,17 @@ class _RecruitScreenState extends State<RecruitScreen> {
 
   void _onRecruit(BuildContext context, bool isPremium) async {
     final manager = Provider.of<LeagueManager>(context, listen: false);
+    final messenger = ScaffoldMessenger.of(context);
     final hero = await manager.recruitHero(isPremium);
 
+    if (!mounted) return;
     if (hero != null) {
       GetIt.I<AudioManager>().playSfx('summon.wav'); // Play SFX
       setState(() {
         _lastRecruit = hero;
       });
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Not enough currency!")));
+      messenger.showSnackBar(const SnackBar(content: Text("Not enough currency!")));
     }
   }
 
