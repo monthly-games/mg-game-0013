@@ -1,3 +1,4 @@
+import 'package:mg_common_game/core/ui/layout/mg_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mg_common_game/core/ui/theme/app_colors.dart';
@@ -29,7 +30,7 @@ class InventoryScreen extends StatelessWidget {
 
               // Inventory header
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(MGSpacing.md),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -63,13 +64,13 @@ class InventoryScreen extends StatelessWidget {
 
   Widget _buildTeamSection(BuildContext context, LeagueManager lm) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       color: AppColors.surface,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text('My Team (Max 5)', style: AppTextStyles.subHeader),
-          const SizedBox(height: 12),
+          const SizedBox(height: MGSpacing.sm),
           SizedBox(
             height: 100,
             child: Row(
@@ -119,7 +120,7 @@ class InventoryScreen extends StatelessWidget {
               size: 28,
               color: _getRarityColor(hero.rarity),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: MGSpacing.xxs),
             Text(
               hero.name,
               overflow: TextOverflow.ellipsis,
@@ -162,14 +163,14 @@ class InventoryScreen extends StatelessWidget {
             size: 80,
             color: AppColors.textDisabled,
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: MGSpacing.md),
           Text(
             'No mercenaries in inventory',
             style: AppTextStyles.body.copyWith(
               color: AppColors.textMediumEmphasis,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: MGSpacing.xs),
           Text(
             'Recruit heroes from the shop',
             style: AppTextStyles.caption.copyWith(
@@ -183,7 +184,7 @@ class InventoryScreen extends StatelessWidget {
 
   Widget _buildInventoryGrid(BuildContext context, LeagueManager lm) {
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         mainAxisSpacing: 12,
@@ -231,7 +232,7 @@ class InventoryScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                const SizedBox(height: 4),
+                const SizedBox(height: MGSpacing.xxs),
 
                 // Job Icon
                 Icon(
@@ -239,7 +240,7 @@ class InventoryScreen extends StatelessWidget {
                   size: 36,
                   color: _getRarityColor(hero.rarity),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: MGSpacing.xxs),
 
                 // Name
                 Text(
@@ -292,7 +293,7 @@ class InventoryScreen extends StatelessWidget {
         title: Row(
           children: [
             Icon(_getJobIcon(hero.job), color: _getRarityColor(hero.rarity)),
-            const SizedBox(width: 12),
+            const SizedBox(width: MGSpacing.sm),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,7 +327,7 @@ class InventoryScreen extends StatelessWidget {
 
               // Stats
               const Text('Combat Stats', style: AppTextStyles.subHeader),
-              const SizedBox(height: 8),
+              const SizedBox(height: MGSpacing.xs),
               _buildStatBar('HP', hero.maxHp, 250, MGColors.success),
               _buildStatBar('ATK', hero.attack, 50, MGColors.error),
               _buildStatBar('DEF', hero.defense, 30, MGColors.info),
@@ -345,7 +346,7 @@ class InventoryScreen extends StatelessWidget {
 
               // Skill
               const Text('Skill', style: AppTextStyles.subHeader),
-              const SizedBox(height: 8),
+              const SizedBox(height: MGSpacing.xs),
               Text(
                 hero.skill.name,
                 style: AppTextStyles.body.copyWith(
@@ -359,7 +360,7 @@ class InventoryScreen extends StatelessWidget {
                   color: AppColors.textMediumEmphasis,
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: MGSpacing.xxs),
               Text(
                 'Cooldown: ${hero.skill.cooldown}s',
                 style: AppTextStyles.caption.copyWith(

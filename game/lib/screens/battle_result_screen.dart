@@ -1,9 +1,11 @@
+import 'package:mg_common_game/core/ui/layout/mg_spacing.dart';
 import 'package:flutter/material.dart';
 import 'package:mg_common_game/core/ui/theme/app_colors.dart';
 import 'package:mg_common_game/core/ui/theme/app_text_styles.dart';
 import '../features/league/battle_result_data.dart';
 import '../features/league/league_data.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../core/localization/app_localizations.dart';
+
 
 class BattleResultScreen extends StatelessWidget {
   final BattleResultData result;
@@ -23,7 +25,7 @@ class BattleResultScreen extends StatelessWidget {
         child: Center(
           child: Container(
             width: MediaQuery.of(context).size.width * 0.9,
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(MGSpacing.lg),
             decoration: BoxDecoration(
               color: AppColors.panel,
               borderRadius: BorderRadius.circular(16),
@@ -37,25 +39,25 @@ class BattleResultScreen extends StatelessWidget {
               children: [
                 // Result Header
                 _buildResultHeader(),
-                const SizedBox(height: 24),
+                const SizedBox(height: MGSpacing.lg),
 
                 // Tier Change (if applicable)
                 if (result.tierChanged) ...[
                   _buildTierChange(),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: MGSpacing.lg),
                 ],
 
                 // Rewards Section
                 _buildRewardsSection(),
-                const SizedBox(height: 24),
+                const SizedBox(height: MGSpacing.lg),
 
                 // Stats Section
                 _buildStatsSection(),
-                const SizedBox(height: 24),
+                const SizedBox(height: MGSpacing.lg),
 
                 // Record Section
                 _buildRecordSection(),
-                const SizedBox(height: 32),
+                const SizedBox(height: MGSpacing.xl),
 
                 // Continue Button
                 SizedBox(
@@ -95,7 +97,7 @@ class BattleResultScreen extends StatelessWidget {
           size: 80,
           color: result.isVictory ? Colors.amber : MGColors.error,
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: MGSpacing.md),
         // Result Message
         Text(
           result.resultMessage,
@@ -115,7 +117,7 @@ class BattleResultScreen extends StatelessWidget {
     final tierData = LeagueTiers.getByTier(result.newTier);
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       decoration: BoxDecoration(
         color: isPromotion ? Colors.amber.withValues(alpha: 0.2) : MGColors.error.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
@@ -131,7 +133,7 @@ class BattleResultScreen extends StatelessWidget {
             color: isPromotion ? Colors.amber : MGColors.error,
             size: 40,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: MGSpacing.xs),
           Text(
             isPromotion ? 'PROMOTED!' : 'RELEGATED',
             style: AppTextStyles.subHeader.copyWith(
@@ -139,7 +141,7 @@ class BattleResultScreen extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: MGSpacing.xxs),
           Text(
             '${LeagueTiers.getByTier(result.previousTier).nameKr} → ${tierData.nameKr}',
             style: AppTextStyles.body.copyWith(
@@ -153,7 +155,7 @@ class BattleResultScreen extends StatelessWidget {
 
   Widget _buildRewardsSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(8),
@@ -167,7 +169,7 @@ class BattleResultScreen extends StatelessWidget {
               color: AppColors.textHighEmphasis,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: MGSpacing.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -175,14 +177,14 @@ class BattleResultScreen extends StatelessWidget {
               if (result.goldEarned > 0)
                 _buildRewardItem(
                   icon: '💰',
-                  label: 'Gold',
+                  label: context.l10n.ui_general_received_500_gold,
                   value: '+${result.goldEarned}',
                   color: Colors.amber,
                 ),
               // League Points
               _buildRewardItem(
                 icon: '⭐',
-                label: 'LP',
+                label: context.l10n.ui_general__gachatotalpulls_90_90,
                 value: result.pointsDisplay,
                 color: result.pointsChanged >= 0 ? MGColors.success : MGColors.error,
               ),
@@ -205,7 +207,7 @@ class BattleResultScreen extends StatelessWidget {
           icon,
           style: const TextStyle(fontSize: 32),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: MGSpacing.xxs),
         Text(
           label,
           style: AppTextStyles.caption.copyWith(
@@ -227,7 +229,7 @@ class BattleResultScreen extends StatelessWidget {
 
   Widget _buildStatsSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(8),
@@ -241,17 +243,17 @@ class BattleResultScreen extends StatelessWidget {
               color: AppColors.textHighEmphasis,
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: MGSpacing.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildStatItem(
-                label: 'Allies Remaining',
+                label: context.l10n.ui_general_allies_remaining,
                 value: result.allyUnitsRemaining.toString(),
                 color: MGColors.info,
               ),
               _buildStatItem(
-                label: 'Enemies Killed',
+                label: context.l10n.ui_general_enemies_killed,
                 value: result.enemyUnitsKilled.toString(),
                 color: MGColors.error,
               ),
@@ -276,7 +278,7 @@ class BattleResultScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: MGSpacing.xxs),
         Text(
           label,
           style: AppTextStyles.caption.copyWith(
@@ -290,7 +292,7 @@ class BattleResultScreen extends StatelessWidget {
 
   Widget _buildRecordSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(MGSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(8),
@@ -299,17 +301,17 @@ class BattleResultScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildRecordItem(
-            label: 'Total Wins',
+            label: context.l10n.game_state_total_wins,
             value: result.totalWins.toString(),
             color: MGColors.success,
           ),
           _buildRecordItem(
-            label: 'Total Losses',
+            label: context.l10n.ui_general_total_losses,
             value: result.totalLosses.toString(),
             color: MGColors.error,
           ),
           _buildRecordItem(
-            label: 'Win Rate',
+            label: context.l10n.game_state_win_rate,
             value: '${(result.winRate * 100).toStringAsFixed(1)}%',
             color: AppColors.primary,
           ),
@@ -333,7 +335,7 @@ class BattleResultScreen extends StatelessWidget {
             fontSize: 16,
           ),
         ),
-        const SizedBox(height: 4),
+        const SizedBox(height: MGSpacing.xxs),
         Text(
           label,
           style: AppTextStyles.caption.copyWith(

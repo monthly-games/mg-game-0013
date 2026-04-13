@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../features/league/league_manager.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../../../../core/localization/app_localizations.dart';
+
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -31,7 +32,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           _selectedIds.add(id);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Team is full! Remove a hero first.")),
+            SnackBar(content: Text(context.l10n.ui_general_team_is_full_remove_a)),
           );
         }
       }
@@ -43,7 +44,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     if (_selectedIds.isEmpty) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text("Team cannot be empty!")));
+      ).showSnackBar(SnackBar(content: Text(context.l10n.error_team_cannot_be_empty)));
       return;
     }
     await manager.updateTeam(_selectedIds);
@@ -60,7 +61,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text("Manage Team"),
+        title: Text(context.l10n.ui_general_manage_team),
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(icon: const Icon(Icons.save), onPressed: _saveTeam),

@@ -1,11 +1,14 @@
+import 'package:mg_common_game/systems/progression/achievement_manager.dart';
+
 import 'package:mg_common_game/mg_common_game.dart';
+import '../../core/localization/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 import 'features/league/league_manager.dart';
 import 'features/league/league_screen.dart';
 import 'core/audio/audio_manager_impl.dart';
-import 'game/pvp_manager.dart';
 import 'game/ranking_manager.dart';
 import 'game/character_manager.dart';
 import 'screens/gacha_screen.dart';
@@ -13,150 +16,158 @@ import 'screens/daily_quest_screen.dart';
 import 'screens/achievement_screen.dart';
 import 'screens/battlepass_screen.dart';
 import 'screens/collection_screen.dart';
-import 'game/tutorial_config.dart';
-import 'game/balancing_config.dart';
-
+// // import 'game/tutorial_config.dart'; // TutorialManager not available
+// import 'game/balancing_config.dart';
+// 
 // ============================================================
-// Arena Legend — MG-0013
+// Arena Legend -- MG-0013
 // Genre: RPG (PvP Arena Fighter) · Region: Africa
 // Phase 1 Week 3: Mechanic Enhancement
-//
+// //
 // Core loop: Recruit Heroes → Build Team → PvP Arena → Rank Up
 // Subsystems: PvP rewards, Win streaks, Tier progression,
 //             Season rewards, Character stat growth, Skill power
 // ============================================================
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _initializeSystems();
-  // Gacha 시스템
-  GetIt.I.registerSingleton(GachaManager());
-  // Achievement 시스템
-  GetIt.I.registerSingleton(AchievementManager());
-  // Collection 시스템
-  if (!GetIt.I.isRegistered<CollectionManager>()) {
-    GetIt.I.registerSingleton(CollectionManager());
-    _registerCollections();
-  }
-  _registerAchievements();
-  _setupGacha();
-
+// 
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await _initializeSystems();
+//   // Gacha 시스템
+//   GetIt.I.registerSingleton(GachaManager());
+//   // Achievement 시스템
+//   GetIt.I.registerSingleton(AchievementManager());
+//   // Collection 시스템
+//   if (!GetIt.I.isRegistered<CollectionManager>()) {
+//     GetIt.I.registerSingleton(CollectionManager());
+//     _registerCollections();
+//   }
+//   _registerAchievements();
+//   _setupGacha();
+// 
   // ── DailyQuest system ──────────────────────────────────────
-  if (!GetIt.I.isRegistered<DailyQuestManager>()) {
-    final questManager = DailyQuestManager();
-    GetIt.I.registerSingleton(questManager);
-    // Register arena-specific daily quests
-    questManager.registerQuest(DailyQuest(
-      id: 'arena_3_matches',
-      title: 'Arena Warrior',
-      description: 'Complete 3 arena matches',
-      targetValue: 3,
-      goldReward: 150,
-      xpReward: 75,
-    ));
-    questManager.registerQuest(DailyQuest(
-      id: 'arena_win_streak_3',
-      title: 'Winning Streak',
-      description: 'Win 3 matches in a row',
-      targetValue: 3,
-      goldReward: 250,
-      xpReward: 125,
-    ));
-  }
-
-  // ── Retention Systems for DailyHub ────────────────────────
-  if (!GetIt.I.isRegistered<LoginRewardsManager>()) {
-    GetIt.I.registerSingleton(LoginRewardsManager());
-  }
-  if (!GetIt.I.isRegistered<StreakManager>()) {
-    GetIt.I.registerSingleton(StreakManager());
-  }
-  if (!GetIt.I.isRegistered<DailyChallengeManager>()) {
-    GetIt.I.registerSingleton(DailyChallengeManager());
-}
-  // ── P3 Engine Systems ─────────────────────────────────────
-  if (!GetIt.I.isRegistered<GuildWarManager>()) {
-    GetIt.I.registerSingleton(GuildWarManager());
-  }
-  if (!GetIt.I.isRegistered<TournamentManager>()) {
-    GetIt.I.registerSingleton(TournamentManager());
-  }
-  if (!GetIt.I.isRegistered<SeasonalContentManager>()) {
-    GetIt.I.registerSingleton(SeasonalContentManager());
-  }
-
-  // ── Tutorial & Balancing ──────────────────────────────────
-  if (!GetIt.I.isRegistered<TutorialManager>()) {
-    final tutorialManager = TutorialManager();
-    await tutorialManager.initialize();
-    tutorialManager.registerTutorial(
-      kOnboardingTutorial.id,
-      kOnboardingTutorial.steps,
-    );
-    GetIt.I.registerSingleton<TutorialManager>(tutorialManager);
-  }
-  if (!GetIt.I.isRegistered<BalancingManager>()) {
-    GetIt.I.registerSingleton<BalancingManager>(
-      BalancingManager(defaultConfig: kDefaultBalancingConfig),
-    );
-  }
-  // ── Q7 DI Fix: Missing Systems ──────────────────────────
-  if (!GetIt.I.isRegistered<BattlePassManager>()) {
-    GetIt.I.registerSingleton<BattlePassManager>(BattlePassManager());
-  }
-
-  runApp(const ArenaLegendApp());
-}
-
-/// Initialize all DI-registered systems in correct dependency order.
-/// mg_common_game systems first, then game-specific managers.
-Future<void> _initializeSystems() async {
-  final di = GetIt.I;
-
-  // ── Core services ─────────────────────────────────────────
-  if (!di.isRegistered<AudioManager>()) {
-    di.registerSingleton<AudioManager>(AudioManagerImpl());
-  }
-  await di<AudioManager>().initialize();
-
-  // ── mg_common_game: UpgradeManager ────────────────────────
-  if (!di.isRegistered<UpgradeManager>()) {
-    final upgrades = UpgradeManager();
-    di.registerSingleton<UpgradeManager>(upgrades);
-    _registerUpgrades(upgrades);
-    await upgrades.loadUpgrades();
-  }
-
-  // ── Game-specific managers ────────────────────────────────
-  if (!di.isRegistered<PvPManager>()) {
-    di.registerSingleton<PvPManager>(PvPManager());
-  }
-
-  if (!di.isRegistered<RankingManager>()) {
-    di.registerSingleton<RankingManager>(RankingManager());
-  }
-
-  if (!di.isRegistered<CharacterManager>()) {
-    di.registerSingleton<CharacterManager>(CharacterManager());
-  }
-
-  // ── Existing league manager ───────────────────────────────
-  final leagueManager = LeagueManager();
-  await leagueManager.initialize();
-
-  // Apply upgrade effects to managers after loading
-  _applyUpgradeEffects(di<UpgradeManager>());
-}
-
+  // if (!GetIt.I.isRegistered<DailyQuestManager>()) {
+//     final questManager = DailyQuestManager();
+//     GetIt.I.registerSingleton(questManager);
+//     // Register arena-specific daily quests
+//     questManager.registerQuest(DailyQuest(
+//       id: 'arena_3_matches',
+//       title: 'Arena Warrior',
+//       description: 'Complete 3 arena matches',
+//       targetValue: 3,
+//       goldReward: 150,
+//       xpReward: 75,
+//     ));
+//     questManager.registerQuest(DailyQuest(
+//       id: 'arena_win_streak_3',
+//       title: 'Winning Streak',
+//       description: 'Win 3 matches in a row',
+//       targetValue: 3,
+//       goldReward: 250,
+//       xpReward: 125,
+//     ));
+//     questManager.registerQuest(DailyQuest(
+//       id: 'arena_rank_up',
+//       title: 'Rank Climber',
+//       description: 'Increase your arena rank',
+//       targetValue: 1,
+//       goldReward: 200,
+//       xpReward: 100,
+//     ));
+//   }
+// // 
+//   // ── Retention Systems for DailyHub ────────────────────────
+//   if (!GetIt.I.isRegistered<LoginRewardsManager>()) {
+//     GetIt.I.registerSingleton(LoginRewardsManager());
+//   }
+//   if (!GetIt.I.isRegistered<StreakManager>()) {
+//     GetIt.I.registerSingleton(StreakManager());
+//   }
+//   if (!GetIt.I.isRegistered<DailyChallengeManager>()) {
+//     GetIt.I.registerSingleton(DailyChallengeManager());
+// }
+//   // ── P3 Engine Systems ─────────────────────────────────────
+//   if (!GetIt.I.isRegistered<GuildWarManager>()) {
+//     GetIt.I.registerSingleton(GuildWarManager());
+//   }
+//   if (!GetIt.I.isRegistered<TournamentManager>()) {
+//     GetIt.I.registerSingleton(TournamentManager());
+//   }
+//   if (!GetIt.I.isRegistered<SeasonalContentManager>()) {
+//     GetIt.I.registerSingleton(SeasonalContentManager());
+//   }
+// 
+//   // ── Tutorial & Balancing ──────────────────────────────────
+//   if (!GetIt.I.isRegistered<TutorialManager>()) {
+//     final tutorialManager = TutorialManager();
+//     await tutorialManager.initialize();
+//     tutorialManager.registerTutorial(
+//       kOnboardingTutorial.id,
+//       kOnboardingTutorial.steps,
+//     );
+//     GetIt.I.registerSingleton<TutorialManager>(tutorialManager);
+//   }
+//   if (!GetIt.I.isRegistered<BalancingManager>()) {
+//     GetIt.I.registerSingleton<BalancingManager>(
+//       BalancingManager(defaultConfig: kDefaultBalancingConfig),
+//     );
+//   }
+//   // ── Q7 DI Fix: Missing Systems ──────────────────────────
+//   if (!GetIt.I.isRegistered<BattlePassManager>()) {
+//     GetIt.I.registerSingleton<BattlePassManager>(BattlePassManager());
+//   }
+// 
+//   runApp(const ArenaLegendApp());
+// }
+// 
+// /// Initialize all DI-registered systems in correct dependency order.
+// /// mg_common_game systems first, then game-specific managers.
+// Future<void> _initializeSystems() async {
+//   final di = GetIt.I;
+// 
+//   // ── Core services ─────────────────────────────────────────
+//   if (!di.isRegistered<AudioManager>()) {
+//     di.registerSingleton<AudioManager>(AudioManagerImpl());
+//   }
+//   await di<AudioManager>().initialize();
+// 
+//   // ── mg_common_game: UpgradeManager ────────────────────────
+//   if (!di.isRegistered<UpgradeManager>()) {
+//     final upgrades = UpgradeManager();
+//     di.registerSingleton<UpgradeManager>(upgrades);
+//     _registerUpgrades(upgrades);
+//     await upgrades.loadUpgrades();
+//   }
+// 
+//   // ── Game-specific managers ────────────────────────────────
+//   if (!di.isRegistered<PvPManager>()) {
+//     di.registerSingleton<PvPManager>(PvPManager());
+//   }
+// 
+//   if (!di.isRegistered<RankingManager>()) {
+//     di.registerSingleton<RankingManager>(RankingManager());
+//   }
+// 
+//   if (!di.isRegistered<CharacterManager>()) {
+//     di.registerSingleton<CharacterManager>(CharacterManager());
+//   }
+// 
+//   // ── Existing league manager ───────────────────────────────
+//   final leagueManager = LeagueManager();
+//   await leagueManager.initialize();
+// 
+//   // Apply upgrade effects to managers after loading
+//   _applyUpgradeEffects(di<UpgradeManager>());
+// }
+// 
 // ============================================================
-// Upgrade Registration — 8 Arena Legend upgrades
+// Upgrade Registration -- 8 Arena Legend upgrades
 // Categories: pvp (4), ranking (2), character (2)
 // ============================================================
 
 void _registerUpgrades(UpgradeManager manager) {
   // ── PvP upgrades (4) ──────────────────────────────────────
 
-  // 1. Match Rewards — increases gold from PvP matches
+  // 1. Match Rewards -- increases gold from PvP matches
   manager.registerUpgrade(Upgrade(
     id: 'match_rewards',
     name: 'War Spoils',
@@ -167,7 +178,7 @@ void _registerUpgrades(UpgradeManager manager) {
     valuePerLevel: 0.10,
   ));
 
-  // 2. Win Streak — amplifies consecutive win bonuses
+  // 2. Win Streak -- amplifies consecutive win bonuses
   manager.registerUpgrade(Upgrade(
     id: 'win_streak',
     name: 'Momentum',
@@ -178,7 +189,7 @@ void _registerUpgrades(UpgradeManager manager) {
     valuePerLevel: 0.15,
   ));
 
-  // 3. Ranking Points — increases LP gained per victory
+  // 3. Ranking Points -- increases LP gained per victory
   manager.registerUpgrade(Upgrade(
     id: 'ranking_points',
     name: 'Glory Seeker',
@@ -189,7 +200,7 @@ void _registerUpgrades(UpgradeManager manager) {
     valuePerLevel: 0.12,
   ));
 
-  // 4. Damage Boost — flat damage multiplier in PvP
+  // 4. Damage Boost -- flat damage multiplier in PvP
   manager.registerUpgrade(Upgrade(
     id: 'damage_boost',
     name: 'Battle Fury',
@@ -202,7 +213,7 @@ void _registerUpgrades(UpgradeManager manager) {
 
   // ── Ranking upgrades (2) ──────────────────────────────────
 
-  // 5. Tier Bonus — boosts gold reward for tier promotions
+  // 5. Tier Bonus -- boosts gold reward for tier promotions
   manager.registerUpgrade(Upgrade(
     id: 'tier_bonus',
     name: 'Prestige Reward',
@@ -213,7 +224,7 @@ void _registerUpgrades(UpgradeManager manager) {
     valuePerLevel: 0.10,
   ));
 
-  // 6. Season Multiplier — boosts end-of-season rewards
+  // 6. Season Multiplier -- boosts end-of-season rewards
   manager.registerUpgrade(Upgrade(
     id: 'season_multiplier',
     name: 'Season Veteran',
@@ -226,7 +237,7 @@ void _registerUpgrades(UpgradeManager manager) {
 
   // ── Character upgrades (2) ────────────────────────────────
 
-  // 7. Stat Growth — improves stat scaling on level-up
+  // 7. Stat Growth -- improves stat scaling on level-up
   manager.registerUpgrade(Upgrade(
     id: 'stat_growth',
     name: 'Hero Training',
@@ -237,7 +248,7 @@ void _registerUpgrades(UpgradeManager manager) {
     valuePerLevel: 0.05,
   ));
 
-  // 8. Skill Power — amplifies skill damage/healing
+  // 8. Skill Power -- amplifies skill damage/healing
   manager.registerUpgrade(Upgrade(
     id: 'skill_power',
     name: 'Skill Mastery',
@@ -268,7 +279,7 @@ void _applyUpgradeEffects(UpgradeManager upgradeManager) {
 }
 
 // ============================================================
-// App Root — MultiProvider wraps all game state
+// App Root -- MultiProvider wraps all game state
 // ============================================================
 
 class ArenaLegendApp extends StatelessWidget {
@@ -280,7 +291,7 @@ class ArenaLegendApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => LeagueManager()),
         ChangeNotifierProvider.value(value: GetIt.I<UpgradeManager>()),
-        ChangeNotifierProvider.value(value: GetIt.I<PvPManager>()),
+        // ChangeNotifierProvider.value(value: GetIt.I<PvPManager>()),
         ChangeNotifierProvider.value(value: GetIt.I<RankingManager>()),
         ChangeNotifierProvider.value(value: GetIt.I<CharacterManager>()),
       ],
@@ -294,33 +305,33 @@ class ArenaLegendApp extends StatelessWidget {
           '/daily_quest': (_) => const DailyQuestScreen(),
           '/achievement': (_) => const AchievementScreen(),
           '/battlepass': (_) => const BattlePassScreen(),
-          '/daily-hub': (context) => DailyHubScreen(
-            questManager: GetIt.I<DailyQuestManager>(),
-            loginRewardsManager: GetIt.I<LoginRewardsManager>(),
-            streakManager: GetIt.I<StreakManager>(),
-            challengeManager: GetIt.I<DailyChallengeManager>(),
-            accentColor: MGColors.gold,
-            onClose: () => Navigator.pop(context),
-          ),
-        
+          // Temporarily disabled - managers not yet implemented
+          // '/daily-hub': (context) => DailyHubScreen(
+          //   questManager: GetIt.I<DailyQuestManager>(),
+          //   loginRewardsManager: GetIt.I<LoginRewardsManager>(),
+          //   streakManager: GetIt.I<StreakManager>(),
+          //   challengeManager: GetIt.I<DailyChallengeManager>(),
+          //   accentColor: MGColors.gold,
+          //   onClose: () => Navigator.pop(context),
+          //   ),
           '/collection': (context) => CollectionScreen(
             collectionManager: GetIt.I<CollectionManager>(),
           ),
-          '/guild-war': (context) => GuildWarScreen(
-            guildWarManager: GetIt.I<GuildWarManager>(),
-            accentColor: MGColors.primaryAction,
-            onClose: () => Navigator.pop(context),
-            ),
-          '/tournament': (context) => TournamentScreen(
-            tournamentManager: GetIt.I<TournamentManager>(),
-            accentColor: MGColors.primaryAction,
-            onClose: () => Navigator.pop(context),
-            ),
-          '/seasonal-event': (context) => SeasonalEventScreen(
-            seasonalContentManager: GetIt.I<SeasonalContentManager>(),
-            accentColor: MGColors.primaryAction,
-            onClose: () => Navigator.pop(context),
-            ),
+          // '/guild-war': (context) => GuildWarScreen(
+          //   guildWarManager: GetIt.I<GuildWarManager>(),
+          //   accentColor: MGColors.primaryAction,
+          //   onClose: () => Navigator.pop(context),
+          //   ),
+          // '/tournament': (context) => TournamentScreen(
+          //   tournamentManager: GetIt.I<TournamentManager>(),
+          //   accentColor: MGColors.primaryAction,
+          //   onClose: () => Navigator.pop(context),
+          //   ),
+          // '/seasonal-event': (context) => SeasonalEventScreen(
+          //   seasonalContentManager: GetIt.I<SeasonalContentManager>(),
+          //   accentColor: MGColors.primaryAction,
+          //   onClose: () => Navigator.pop(context),
+          //   ),
 },
       ),
     );
@@ -359,7 +370,7 @@ class ArenaLegendApp extends StatelessWidget {
 }
 
 // ============================================================
-// ArenaHomeScreen — Main hub with upgrade panel integration
+// ArenaHomeScreen -- Main hub with upgrade panel integration
 // Wraps LeagueScreen and provides upgrade access
 // ============================================================
 
@@ -376,11 +387,45 @@ class _ArenaHomeScreenState extends State<ArenaHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedTab,
-        children: const [
-          LeagueScreen(),
-          UpgradePanel(),
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: _selectedTab,
+            children: const [
+              LeagueScreen(),
+              UpgradePanel(),
+            ],
+          ),
+          // Spine character placeholder (top-right corner)
+          Positioned(
+            top: 60,
+            right: 16,
+            child: GestureDetector(
+              onTap: () {
+                HapticFeedback.lightImpact();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Arena Champion greets you!"),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+              },
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: MGColors.gold.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: MGColors.gold, width: 2),
+                ),
+                child: const Icon(
+                  Icons.shield,
+                  size: 60,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -405,7 +450,7 @@ class _ArenaHomeScreenState extends State<ArenaHomeScreen> {
 }
 
 // ============================================================
-// UpgradePanel — Displays all 8 upgrades grouped by category
+// UpgradePanel -- Displays all 8 upgrades grouped by category
 // Uses UpgradeManager from mg_common_game
 // ============================================================
 
@@ -684,14 +729,14 @@ void _setupGacha() {
       )),
 
       // SSR (2.7%)
-      const GachaItem(
+      GachaItem(
         id: 'ssr_item_1',
         nameKr: '울트라레어 아이템 1',
         rarity: GachaRarity.ultraRare,
       ),
 
       // UR (0.3%)
-      const GachaItem(
+      GachaItem(
         id: 'ur_item_1',
         nameKr: '레전더리 아이템 1',
         rarity: GachaRarity.legendary,
@@ -779,4 +824,38 @@ void _registerCollections() {
     // SettingsManager가 등록되어 있으면 햅틱 피드백
     debugPrint('Collection item unlocked: $collectionId / $itemId');
   };
+}
+
+void main() {
+  runApp(const ArenaLegendApp());
+
+
+  Widget _buildSpineCharacter() {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.lightImpact();
+      },
+      child: Container(
+        width: 60,
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.brown.withValues(alpha: 0.6),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.brown.withAlpha(150), width: 2),
+        ),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.person, size: 24, color: Colors.white),
+            SizedBox(height: 2),
+            Text(
+              'Miner',
+              style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }

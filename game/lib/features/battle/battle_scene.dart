@@ -1,3 +1,4 @@
+import '../../../core/localization/app_localizations.dart';
 import 'package:flame/game.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +146,7 @@ class BattleScene extends FlameGame {
                       Navigator.of(context).pop();
                       onBattleEnd(isWin);
                     },
-                    child: const Text("Continue"),
+                    child: Text(AppLocalizations.of(context).ui_general_continue_experiment),
                   ),
                 ],
               ),

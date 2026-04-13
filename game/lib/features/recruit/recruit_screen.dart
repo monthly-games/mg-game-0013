@@ -4,7 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import '../../features/league/league_manager.dart';
 import '../../features/hero/hero_data.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../../../../core/localization/app_localizations.dart';
+
 
 class RecruitScreen extends StatefulWidget {
   const RecruitScreen({super.key});
@@ -28,7 +29,7 @@ class _RecruitScreenState extends State<RecruitScreen> {
         _lastRecruit = hero;
       });
     } else {
-      messenger.showSnackBar(const SnackBar(content: Text("Not enough currency!")));
+      messenger.showSnackBar(SnackBar(content: Text(context.l10n.ui_general_not_enough_currency)));
     }
   }
 
@@ -39,7 +40,7 @@ class _RecruitScreenState extends State<RecruitScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
-        title: const Text("Recruit Heroes"),
+        title: Text(context.l10n.ui_general_recruit_heroes),
         backgroundColor: Colors.transparent,
       ),
       body: Center(
@@ -51,7 +52,7 @@ class _RecruitScreenState extends State<RecruitScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _CurrencyChip(
-                  label: "Gold",
+                  label: context.l10n.ui_general_received_500_gold,
                   value: manager.gold,
                   color: Colors.amber,
                 ),
@@ -227,9 +228,9 @@ class _HeroCard extends StatelessWidget {
             style: TextStyle(color: Colors.grey[400]),
           ),
           const Divider(),
-          Text("ATK: ${hero.attack.toInt()}"),
-          Text("DEF: ${hero.defense.toInt()}"),
-          Text("HP: ${hero.maxHp.toInt()}"),
+          Text(context.l10n.ui_general_atk_heroattacktoint),
+          Text(context.l10n.ui_general_def_herodefensetoint),
+          Text(context.l10n.ui_general_hp_heromaxhptoint),
         ],
       ),
     );

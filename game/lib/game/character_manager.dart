@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/systems/progression/upgrade_manager.dart';
 
 // ============================================================
-// CharacterManager — Arena Legend character progression subsystem
+// CharacterManager -- Arena Legend character progression subsystem
 // Handles stat growth scaling and skill power bonuses.
 // ============================================================
 

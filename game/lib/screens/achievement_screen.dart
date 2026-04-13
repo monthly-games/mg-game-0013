@@ -1,6 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 // ============================================================
-// Achievement Screen — MG-0013 Arena Legends: Mercenary League
+// Achievement Screen -- MG-0013 Arena Legends: Mercenary League
 // Genre: Crossgame / Raid / Event · Retention System UI
 //
 // Template: Based on MG-0024 canonical template.

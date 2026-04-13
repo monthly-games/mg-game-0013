@@ -1,5 +1,6 @@
+import '../core/localization/app_localizations.dart';
 // ============================================================
-// Gacha Screen — MG-0013 Arena Legend
+// Gacha Screen -- MG-0013 Arena Legend
 // Genre: RPG (PvP Arena Fighter) · Retention System UI
 //
 // Firebase Analytics Events:
@@ -9,7 +10,7 @@
 //   - gacha_history_viewed: History/collection tab opened
 //
 // Template: Based on MG-0006 canonical template (Batch 1).
-// ============================================================
+
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
@@ -181,7 +182,7 @@ class _GachaScreenState extends State<GachaScreen>
                 Padding(
                   padding: const EdgeInsets.all(MGSpacing.lg),
                   child: MGButton(
-                    label: 'OK',
+                    label: context.l10n.ui_general_diwali_token_collection,
                     onPressed: _dismissResults,
                     size: MGButtonSize.large,
                     width: double.infinity,
@@ -523,7 +524,7 @@ class _GachaScreenState extends State<GachaScreen>
       children: [
         Expanded(
           child: GachaPullButton(
-            label: '1x Pull',
+            label: context.l10n.ui_general_1x_pull,
             cost: _kSinglePullCost,
             onPressed: _onSinglePull,
           ),
@@ -531,7 +532,7 @@ class _GachaScreenState extends State<GachaScreen>
         const SizedBox(width: MGSpacing.md),
         Expanded(
           child: GachaPullButton(
-            label: '10x Pull',
+            label: context.l10n.ui_general_10x_pull,
             cost: _kMultiPullCost,
             onPressed: _onMultiPull,
           ),
@@ -645,6 +646,7 @@ class _GachaScreenState extends State<GachaScreen>
       GachaRarity.normal => MGColors.common,
       GachaRarity.rare => MGColors.rare,
       GachaRarity.superRare => MGColors.epic,
+      GachaRarity.superRare => MGColors.legendary,
       GachaRarity.ultraRare => MGColors.legendary,
       GachaRarity.legendary => MGColors.mythic,
     };

@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/systems/progression/upgrade_manager.dart';
 
 // ============================================================
-// RankingManager — Arena Legend tier & season subsystem
+// RankingManager -- Arena Legend tier & season subsystem
 // Handles tier progression, promotion rewards, and season flow.
 // ============================================================
 

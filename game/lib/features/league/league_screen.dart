@@ -9,6 +9,8 @@ import '../../features/hero/inventory_screen.dart';
 import 'league_manager.dart';
 import '../battle/battle_scene.dart';
 import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
+import '../../../../core/localization/app_localizations.dart';
+
 
 class LeagueScreen extends StatefulWidget {
   const LeagueScreen({super.key});
@@ -169,7 +171,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                         );
                       },
                       icon: const Icon(Icons.people),
-                      label: const Text("Manage Team"),
+                      label: Text(context.l10n.ui_general_manage_team),
                     ),
                     const SizedBox(width: 20),
                     ElevatedButton.icon(
@@ -182,7 +184,7 @@ class _LeagueScreenState extends State<LeagueScreen> {
                         );
                       },
                       icon: const Icon(Icons.person_add),
-                      label: const Text("Recruit"),
+                      label: Text(context.l10n.ui_general_recruit_heroes),
                     ),
                   ],
                 ),

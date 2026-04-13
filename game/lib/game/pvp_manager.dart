@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/systems/progression/upgrade_manager.dart';
 
 // ============================================================
-// PvPManager — Arena Legend PvP combat subsystem
+// PvPManager -- Arena Legend PvP combat subsystem
 // Handles match rewards, win streaks, and ranking point flow.
 // ============================================================
 

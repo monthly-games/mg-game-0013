@@ -53,30 +53,30 @@ class FighterGachaAdapter extends ChangeNotifier {
   List<GachaItem> _generateItems() {
     return [
       // UR (0.6%)
-      const GachaItem(id: 'ur_arena_001', nameKr: '전설의 Fighter', rarity: GachaRarity.ultraRare),
-      const GachaItem(id: 'ur_arena_002', nameKr: '신화의 Fighter', rarity: GachaRarity.ultraRare),
+      GachaItem(id: 'ur_arena_001', nameKr: '전설의 Fighter', rarity: GachaRarity.ultraRare),
+      GachaItem(id: 'ur_arena_002', nameKr: '신화의 Fighter', rarity: GachaRarity.ultraRare),
       // SSR (2.4%)
-      const GachaItem(id: 'ssr_arena_001', nameKr: '영웅의 Fighter', rarity: GachaRarity.superRare),
-      const GachaItem(id: 'ssr_arena_002', nameKr: '고대의 Fighter', rarity: GachaRarity.superRare),
-      const GachaItem(id: 'ssr_arena_003', nameKr: '황금의 Fighter', rarity: GachaRarity.superRare),
+      GachaItem(id: 'ssr_arena_001', nameKr: '영웅의 Fighter', rarity: GachaRarity.superRare),
+      GachaItem(id: 'ssr_arena_002', nameKr: '고대의 Fighter', rarity: GachaRarity.superRare),
+      GachaItem(id: 'ssr_arena_003', nameKr: '황금의 Fighter', rarity: GachaRarity.superRare),
       // SR (12%)
-      const GachaItem(id: 'sr_arena_001', nameKr: '희귀한 Fighter A', rarity: GachaRarity.superRare),
-      const GachaItem(id: 'sr_arena_002', nameKr: '희귀한 Fighter B', rarity: GachaRarity.superRare),
-      const GachaItem(id: 'sr_arena_003', nameKr: '희귀한 Fighter C', rarity: GachaRarity.superRare),
-      const GachaItem(id: 'sr_arena_004', nameKr: '희귀한 Fighter D', rarity: GachaRarity.superRare),
+      GachaItem(id: 'sr_arena_001', nameKr: '희귀한 Fighter A', rarity: GachaRarity.superRare),
+      GachaItem(id: 'sr_arena_002', nameKr: '희귀한 Fighter B', rarity: GachaRarity.superRare),
+      GachaItem(id: 'sr_arena_003', nameKr: '희귀한 Fighter C', rarity: GachaRarity.superRare),
+      GachaItem(id: 'sr_arena_004', nameKr: '희귀한 Fighter D', rarity: GachaRarity.superRare),
       // R (35%)
-      const GachaItem(id: 'r_arena_001', nameKr: '우수한 Fighter A', rarity: GachaRarity.rare),
-      const GachaItem(id: 'r_arena_002', nameKr: '우수한 Fighter B', rarity: GachaRarity.rare),
-      const GachaItem(id: 'r_arena_003', nameKr: '우수한 Fighter C', rarity: GachaRarity.rare),
-      const GachaItem(id: 'r_arena_004', nameKr: '우수한 Fighter D', rarity: GachaRarity.rare),
-      const GachaItem(id: 'r_arena_005', nameKr: '우수한 Fighter E', rarity: GachaRarity.rare),
+      GachaItem(id: 'r_arena_001', nameKr: '우수한 Fighter A', rarity: GachaRarity.rare),
+      GachaItem(id: 'r_arena_002', nameKr: '우수한 Fighter B', rarity: GachaRarity.rare),
+      GachaItem(id: 'r_arena_003', nameKr: '우수한 Fighter C', rarity: GachaRarity.rare),
+      GachaItem(id: 'r_arena_004', nameKr: '우수한 Fighter D', rarity: GachaRarity.rare),
+      GachaItem(id: 'r_arena_005', nameKr: '우수한 Fighter E', rarity: GachaRarity.rare),
       // N (50%)
-      const GachaItem(id: 'n_arena_001', nameKr: '일반 Fighter A', rarity: GachaRarity.normal),
-      const GachaItem(id: 'n_arena_002', nameKr: '일반 Fighter B', rarity: GachaRarity.normal),
-      const GachaItem(id: 'n_arena_003', nameKr: '일반 Fighter C', rarity: GachaRarity.normal),
-      const GachaItem(id: 'n_arena_004', nameKr: '일반 Fighter D', rarity: GachaRarity.normal),
-      const GachaItem(id: 'n_arena_005', nameKr: '일반 Fighter E', rarity: GachaRarity.normal),
-      const GachaItem(id: 'n_arena_006', nameKr: '일반 Fighter F', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_001', nameKr: '일반 Fighter A', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_002', nameKr: '일반 Fighter B', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_003', nameKr: '일반 Fighter C', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_004', nameKr: '일반 Fighter D', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_005', nameKr: '일반 Fighter E', rarity: GachaRarity.normal),
+      GachaItem(id: 'n_arena_006', nameKr: '일반 Fighter F', rarity: GachaRarity.normal),
     ];
   }
 
