@@ -1,10 +1,12 @@
+import 'package:mg_common_game/l10n/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import '../../features/league/league_manager.dart';
 import '../../features/hero/hero_data.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../../../../core/localization/app_localizations.dart';
+import '../../core/localization/app_localizations.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 
 class RecruitScreen extends StatefulWidget {
@@ -29,7 +31,9 @@ class _RecruitScreenState extends State<RecruitScreen> {
         _lastRecruit = hero;
       });
     } else {
-      messenger.showSnackBar(SnackBar(content: Text(context.l10n.ui_general_not_enough_currency)));
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Not enough currency')),
+      );
     }
   }
 

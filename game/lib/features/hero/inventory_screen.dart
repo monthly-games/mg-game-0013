@@ -1,7 +1,9 @@
+import 'package:mg_common_game/l10n/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../features/league/league_manager.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../../../../core/localization/app_localizations.dart';
+import '../../core/localization/app_localizations.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 
 class InventoryScreen extends StatefulWidget {

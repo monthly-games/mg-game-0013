@@ -1,4 +1,4 @@
-import '../core/localization/app_localizations.dart';
+import 'package:mg_common_game/l10n/extensions.dart';
 // ignore_for_file: depend_on_referenced_packages, unused_local_variable
 // ============================================================
 // BattlePass Screen -- MG-0013 Arena Legends: Mercenary League
@@ -18,6 +18,7 @@ import '../core/localization/app_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../core/localization/app_localizations.dart';
 import 'package:mg_common_game/core/ui/mg_ui.dart';
 import 'package:mg_common_game/core/ui/widgets/battlepass/battlepass_tier_list.dart';
 import 'package:mg_common_game/systems/battlepass/battlepass_config.dart';

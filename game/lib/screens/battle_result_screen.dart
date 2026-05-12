@@ -4,7 +4,7 @@ import 'package:mg_common_game/core/ui/theme/app_colors.dart';
 import 'package:mg_common_game/core/ui/theme/app_text_styles.dart';
 import '../features/league/battle_result_data.dart';
 import '../features/league/league_data.dart';
-import 'package:mg_common_game/core/ui/theme/mg_colors.dart';import '../core/localization/app_localizations.dart';
+import 'package:mg_common_game/core/ui/theme/mg_colors.dart';
 
 
 class BattleResultScreen extends StatelessWidget {
@@ -177,14 +177,14 @@ class BattleResultScreen extends StatelessWidget {
               if (result.goldEarned > 0)
                 _buildRewardItem(
                   icon: '💰',
-                  label: context.l10n.ui_general_received_500_gold,
+                  label: 'Gold',
                   value: '+${result.goldEarned}',
                   color: Colors.amber,
                 ),
               // League Points
               _buildRewardItem(
                 icon: '⭐',
-                label: context.l10n.ui_general__gachatotalpulls_90_90,
+                label: 'League Points',
                 value: result.pointsDisplay,
                 color: result.pointsChanged >= 0 ? MGColors.success : MGColors.error,
               ),
@@ -248,12 +248,12 @@ class BattleResultScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildStatItem(
-                label: context.l10n.ui_general_allies_remaining,
+                label: 'Allies Remaining',
                 value: result.allyUnitsRemaining.toString(),
                 color: MGColors.info,
               ),
               _buildStatItem(
-                label: context.l10n.ui_general_enemies_killed,
+                label: 'Enemies Killed',
                 value: result.enemyUnitsKilled.toString(),
                 color: MGColors.error,
               ),
@@ -301,17 +301,17 @@ class BattleResultScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildRecordItem(
-            label: context.l10n.game_state_total_wins,
+            label: 'Total Wins',
             value: result.totalWins.toString(),
             color: MGColors.success,
           ),
           _buildRecordItem(
-            label: context.l10n.ui_general_total_losses,
+            label: 'Total Losses',
             value: result.totalLosses.toString(),
             color: MGColors.error,
           ),
           _buildRecordItem(
-            label: context.l10n.game_state_win_rate,
+            label: 'Win Rate',
             value: '${(result.winRate * 100).toStringAsFixed(1)}%',
             color: AppColors.primary,
           ),

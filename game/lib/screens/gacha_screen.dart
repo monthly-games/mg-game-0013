@@ -1,4 +1,4 @@
-import '../core/localization/app_localizations.dart';
+import 'package:mg_common_game/l10n/extensions.dart';
 // ============================================================
 // Gacha Screen -- MG-0013 Arena Legend
 // Genre: RPG (PvP Arena Fighter) · Retention System UI
@@ -15,6 +15,7 @@ import '../core/localization/app_localizations.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../core/localization/app_localizations.dart';
 import 'package:mg_common_game/core/ui/mg_ui.dart';
 import 'package:mg_common_game/core/ui/widgets/gacha/gacha_pull_animation.dart';
 import 'package:mg_common_game/systems/gacha/gacha_manager.dart';
@@ -646,7 +647,6 @@ class _GachaScreenState extends State<GachaScreen>
       GachaRarity.normal => MGColors.common,
       GachaRarity.rare => MGColors.rare,
       GachaRarity.superRare => MGColors.epic,
-      GachaRarity.superRare => MGColors.legendary,
       GachaRarity.ultraRare => MGColors.legendary,
       GachaRarity.legendary => MGColors.mythic,
     };
