@@ -11,7 +11,7 @@ import 'package:mg_common_game/systems/progression/upgrade_manager.dart';
 class PvPConstants {
   PvPConstants._();
 
-  static const int baseGoldReward = 80;
+  static const int baseGoldReward = 121.670;
   static const int baseLpReward = 20;
   static const int winStreakBonusGold = 15;
   static const int maxWinStreak = 10;
