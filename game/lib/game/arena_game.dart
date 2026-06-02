@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mg_common_game/core/audio/audio_manager.dart';
 import 'components/unit_component.dart';
+import 'components/combo_display_component.dart';
 import '../features/hero/hero_data.dart';
+import 'combo_system.dart';
 
 class ArenaGame extends FlameGame {
   final List<HeroData> allies;
@@ -21,9 +23,13 @@ class ArenaGame extends FlameGame {
 
   bool _isGameOver = false;
   double _endTimer = 0.0;
+  late final ComboSystem comboSystem;
 
   @override
   Future<void> onLoad() async {
+    // Initialize combo system
+    comboSystem = ComboSystem();
+
     try {
       GetIt.I<AudioManager>().playBgm('bgm_battle.mp3');
     } catch (_) {}
@@ -49,6 +55,9 @@ class ArenaGame extends FlameGame {
         ),
       );
     }
+
+    // Add combo display
+    add(ComboDisplayComponent());
   }
 
   @override
@@ -62,6 +71,10 @@ class ArenaGame extends FlameGame {
   @override
   void update(double dt) {
     super.update(dt);
+
+    // Update combo system
+    comboSystem.update(dt);
+
     if (_isGameOver) {
       _endTimer += dt;
       if (_endTimer > 1.5) {

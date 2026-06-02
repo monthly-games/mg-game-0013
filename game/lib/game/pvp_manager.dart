@@ -110,6 +110,32 @@ class PvPManager extends ChangeNotifier {
     return result;
   }
 
+  /// Process match with combo bonus included
+  PvPMatchResult processMatchWithCombo(bool isVictory, int comboBonus) {
+    _totalMatches++;
+
+    if (isVictory) {
+      _totalWins++;
+      _winStreak = (_winStreak + 1).clamp(0, PvPConstants.maxWinStreak);
+    } else {
+      _winStreak = 0;
+    }
+
+    final baseGold = _calculateGoldReward(isVictory);
+    final finalGold = baseGold + comboBonus;
+
+    final result = PvPMatchResult(
+      isVictory: isVictory,
+      goldEarned: finalGold,
+      lpEarned: _calculateLpReward(isVictory),
+      winStreakCount: _winStreak,
+      damageMultiplier: getDamageMultiplier(),
+    );
+
+    notifyListeners();
+    return result;
+  }
+
   /// Reset streak (e.g. on season end).
   void resetStreak() {
     _winStreak = 0;

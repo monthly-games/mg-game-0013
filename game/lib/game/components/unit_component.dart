@@ -165,7 +165,13 @@ class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
     if (target == null) return;
 
     final isCrit = Random().nextDouble() < critRate;
-    final finalDamage = attack * (isCrit ? critDamage : 1.0);
+    final baseDamage = attack * (isCrit ? critDamage : 1.0);
+
+    // Apply combo multiplier for ally team
+    double finalDamage = baseDamage;
+    if (team == UnitTeam.ally && game.comboSystem != null) {
+      finalDamage = game.comboSystem.registerDamage(baseDamage);
+    }
 
     if (data.job == HeroJob.archer || data.job == HeroJob.mage) {
       // Ranged Attack
@@ -191,6 +197,11 @@ class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
   void _castSkill() {
     state = UnitState.casting;
     final skill = data.skill;
+
+    // Register skill usage in combo system (allies only)
+    if (team == UnitTeam.ally) {
+      game.comboSystem.registerSkillUsage();
+    }
 
     // Start cooldown
     _skillCooldownTimer = skill.cooldown;
@@ -235,7 +246,13 @@ class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
   }
 
   void _executeDamageSkill(SkillData skill) {
-    final damage = attack * skill.value;
+    final baseDamage = attack * skill.value;
+
+    // Apply combo multiplier for ally team
+    double damage = baseDamage;
+    if (team == UnitTeam.ally) {
+      damage = game.comboSystem.registerDamage(baseDamage);
+    }
 
     switch (skill.target) {
       case SkillTarget.enemy:
@@ -349,7 +366,14 @@ class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
   }
 
   void _executeAOESkill(SkillData skill) {
-    final damage = attack * skill.value;
+    final baseDamage = attack * skill.value;
+
+    // Apply combo multiplier for ally team
+    double damage = baseDamage;
+    if (team == UnitTeam.ally) {
+      damage = game.comboSystem.registerDamage(baseDamage);
+    }
+
     final radius = skill.aoeRadius ?? 150.0;
 
     game.children.query<UnitComponent>().forEach((other) {
@@ -421,6 +445,11 @@ class UnitComponent extends PositionComponent with HasGameReference<ArenaGame> {
     // Apply defense reduction
     final finalDamage = (amount - defense).clamp(1, amount);
     hp -= finalDamage;
+
+    // Reset combo when ally takes damage
+    if (team == UnitTeam.ally) {
+      game.comboSystem.resetCombo();
+    }
 
     // Show Damage Text
     game.add(

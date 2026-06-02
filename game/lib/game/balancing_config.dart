@@ -18,5 +18,8 @@ const kDefaultBalancingConfig = BalancingConfig(
   difficultyScaling: DifficultyScalingConfig(scalingFactor: 0.1),
   customParams: {
     'reward_multiplier': 1.0,
+    'combo_bonus_enabled': true,
+    'combo_multiplier_per_tier': 0.15,
+    'combo_window_seconds': 3.0,
   },
 );

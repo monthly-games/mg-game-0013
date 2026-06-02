@@ -34,9 +34,7 @@ class AppLocalizations {
   String get ui_general_total_losses => 'Total Losses';
 }
 
-extension AppLocalizationsExtension on BuildContext {
-  AppLocalizations get l10n => AppLocalizations.of(this);
-}
+// [STABILIZED] Local L10n Extension Removed
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
